@@ -1,0 +1,38 @@
+{
+  "report_date": "2026-04-28T21:30:38.221563",
+  "total_hotspots": 2,
+  "total_matched": 0,
+  "total_flagged": 2,
+  "total_emission_kg_hr": 27005377.0,
+  "total_emission_t_yr": 236567102.56,
+  "compliance_flags": [
+    {
+      "hotspot_id": 1,
+      "facility_id": "FAC-0106",
+      "type": "Coal Mine",
+      "country": "Nigeria",
+      "operator": "Operator-C",
+      "detected_t_yr": 206262043.1,
+      "reported_t_yr": 454.8,
+      "ratio": 453522.52,
+      "status": "FLAGGED",
+      "emission_kg_hr": 23545895.33,
+      "lat": 31.005291005291003,
+      "lon": 174.9206349206349
+    },
+    {
+      "hotspot_id": 2,
+      "facility_id": "FAC-0058",
+      "type": "Oil & Gas Well",
+      "country": "Saudi Arabia",
+      "operator": "Operator-G",
+      "detected_t_yr": 30305059.5,
+      "reported_t_yr": 1206.6,
+      "ratio": 25116.08,
+      "status": "FLAGGED",
+      "emission_kg_hr": 3459481.67,
+      "lat": 26.137566137566136,
+      "lon": -177.46031746031744
+    }
+  ]
+}

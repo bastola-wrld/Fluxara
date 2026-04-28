@@ -1,0 +1,55 @@
+{
+  "total_hotspots": 2,
+  "total_emission_kg_hr": 27005377.0,
+  "total_emission_t_yr": 236567102.56,
+  "by_class": {
+    "Minor": {
+      "count": 0,
+      "kg_hr_total": 0
+    },
+    "Moderate": {
+      "count": 0,
+      "kg_hr_total": 0
+    },
+    "Major": {
+      "count": 0,
+      "kg_hr_total": 0
+    },
+    "Extreme": {
+      "count": 2,
+      "kg_hr_total": 27005377.0
+    }
+  },
+  "hotspots": [
+    {
+      "id": 1,
+      "lat": 31.005291005291003,
+      "lon": 174.9206349206349,
+      "peak_lat": 31.428571428571416,
+      "peak_lon": 180.0,
+      "peak_ppb": 1904.151611328125,
+      "mean_ppb": 1896.09130859375,
+      "pixel_count": 36,
+      "anomaly_ppb": 7.16552734375,
+      "cluster": 0,
+      "emission_kg_hr": 23545895.33,
+      "emission_t_yr": 206262043.09,
+      "source_class": "Extreme"
+    },
+    {
+      "id": 2,
+      "lat": 26.137566137566136,
+      "lon": -177.46031746031744,
+      "peak_lat": 25.714285714285708,
+      "peak_lon": -180.0,
+      "peak_ppb": 1895.2391357421875,
+      "mean_ppb": 1893.136962890625,
+      "pixel_count": 9,
+      "anomaly_ppb": 4.211181640625,
+      "cluster": 1,
+      "emission_kg_hr": 3459481.67,
+      "emission_t_yr": 30305059.47,
+      "source_class": "Extreme"
+    }
+  ]
+}
