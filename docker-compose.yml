@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: fluxara-db-1
+    environment:
+      - POSTGRES_USER=fluxara
+      - POSTGRES_PASSWORD=fluxara123
+      - POSTGRES_DB=fluxara
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  api:
+    build: .
+    container_name: fluxara-api-1
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://fluxara:fluxara123@db:5432/fluxara
+      - PYTHONPATH=/app
+      - FLUXARA_ENV=production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./satellite_data:/app/satellite_data
+      - ./checkpoints:/app/checkpoints
+      - ./research:/app/research
+      - ./fluxara:/app/fluxara
+      - ./database:/app/database
+      - ./requirements_api.txt:/app/requirements_api.txt
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+
+  frontend:
+    image: node:20-alpine
+    container_name: fluxara-frontend-1
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 3000"
+    restart: always
+
+  fetcher:
+    build: .
+    container_name: fluxara-fetcher-1
+    depends_on:
+      - api
+    environment:
+      - DATABASE_URL=postgresql://fluxara:fluxara123@db:5432/fluxara
+    volumes:
+      - ./satellite_data:/app/satellite_data
+      - ./fluxara:/app/fluxara
+    command: python fluxara/data/daily_fetch.py
+    restart: always
+
+volumes:
+  postgres_data:

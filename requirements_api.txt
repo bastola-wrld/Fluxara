@@ -1,0 +1,23 @@
+fastapi
+uvicorn
+scipy
+numpy
+xarray
+netCDF4
+python-multipart
+pydantic
+pandas
+schedule
+reportlab
+geopandas
+cdsapi
+sqlalchemy
+python-dotenv
+psycopg2-binary
+pyjwt
+bcrypt
+torch --index-url https://download.pytorch.org/whl/cpu
+asyncpg
+GeoAlchemy2
+email-validator
+gunicorn

@@ -1,0 +1,13 @@
+{
+  "date": "2024-06-15",
+  "lat": 31.85,
+  "lon": -102.1,
+  "tensor_path": "../satellite_data/processed/model_input_20240615.npy",
+  "shape": [
+    7,
+    64,
+    64
+  ],
+  "processed_at": "2026-05-01T12:38:49.567213",
+  "data_source": "real_era5"
+}

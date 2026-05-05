@@ -1,0 +1,41 @@
+name,state,lat,lon,ghg_tonnes,type,id,risk,reported_t_yr,operator
+Pioneer NR Spraberry,TX,31.85,-102.1,542000,Oil & Gas,1,high,542.0,Pioneer
+ExxonMobil XTO Permian,TX,31.7,-102.2,498000,Oil & Gas,2,high,498.0,ExxonMobil
+Chevron Permian Operations,TX,32.2,-101.9,412000,Oil & Gas,3,high,412.0,Chevron
+ConocoPhillips Midland,TX,32.1,-102.5,398000,Oil & Gas,4,medium,398.0,ConocoPhillips
+Occidental Delaware Basin,TX,31.9,-102.3,367000,Oil & Gas,5,medium,367.0,Occidental
+Diamondback Energy,TX,31.6,-102.4,289000,Oil & Gas,6,medium,289.0,Diamondback
+Devon Energy Permian,TX,31.4,-102.6,245000,Oil & Gas,7,medium,245.0,Devon
+Coterra Energy,TX,32.3,-101.7,198000,Oil & Gas,8,low,198.0,Coterra
+Marathon Oil Permian,TX,31.3,-102.8,176000,Oil & Gas,9,low,176.0,Marathon
+Permian Resources,TX,31.8,-103.0,154000,Oil & Gas,10,low,154.0,Permian
+Occidental NM Operations,NM,31.2,-103.2,187000,Oil & Gas,11,low,187.0,Occidental
+ConocoPhillips Delaware,NM,31.5,-103.5,163000,Oil & Gas,12,low,163.0,ConocoPhillips
+Chevron NM,NM,32.0,-103.8,134000,Oil & Gas,13,low,134.0,Chevron
+EOG Resources Eagle Ford,TX,28.5,-99.2,321000,Oil & Gas,14,medium,321.0,EOG
+ConocoPhillips Eagle Ford,TX,28.8,-99.5,287000,Oil & Gas,15,medium,287.0,ConocoPhillips
+Marathon Eagle Ford,TX,28.2,-98.9,234000,Oil & Gas,16,medium,234.0,Marathon
+Continental Resources Bakken,ND,47.8,-102.8,412000,Oil & Gas,17,high,412.0,Continental
+Hess Bakken,ND,47.5,-103.2,356000,Oil & Gas,18,medium,356.0,Hess
+Marathon Bakken,ND,47.2,-103.5,298000,Oil & Gas,19,medium,298.0,Marathon
+EQT Corporation,PA,40.2,-79.8,567000,Natural Gas,20,high,567.0,EQT
+Range Resources,PA,40.5,-80.2,423000,Natural Gas,21,high,423.0,Range
+Southwestern Energy,WV,38.9,-81.5,389000,Natural Gas,22,medium,389.0,Southwestern
+CNX Resources,PA,39.8,-80.1,312000,Natural Gas,23,medium,312.0,CNX
+Shell GoM Operations,LA,28.5,-90.5,756000,Offshore Oil,24,high,756.0,Shell
+BP GoM,LA,28.2,-89.8,634000,Offshore Oil,25,high,634.0,BP
+Chevron GoM,LA,27.8,-91.2,589000,Offshore Oil,26,high,589.0,Chevron
+Arch Coal Black Thunder,WY,43.8,-105.5,892000,Coal Mine,27,high,892.0,Arch
+Peabody North Antelope,WY,43.5,-105.8,765000,Coal Mine,28,high,765.0,Peabody
+ExxonMobil Baytown Refinery,TX,29.73,-94.97,4200000,Refinery,29,high,4200.0,ExxonMobil
+Marathon Galveston Bay,TX,29.37,-94.9,3800000,Refinery,30,high,3800.0,Marathon
+Valero Port Arthur,TX,29.9,-93.93,3200000,Refinery,31,high,3200.0,Valero
+Phillips 66 Lake Charles,LA,30.22,-93.22,2900000,Refinery,32,high,2900.0,Phillips
+Chevron El Segundo,CA,33.9,-118.4,1800000,Refinery,33,high,1800.0,Chevron
+Sabine Pass LNG,LA,29.73,-93.87,2100000,LNG Terminal,34,high,2100.0,Sabine
+Corpus Christi LNG,TX,27.83,-97.2,1700000,LNG Terminal,35,high,1700.0,Corpus
+W.A. Parish Power Plant,TX,29.47,-95.68,8900000,Power Plant,36,high,8900.0,W.A.
+Martin Lake Power Plant,TX,32.26,-94.57,7600000,Power Plant,37,high,7600.0,Martin
+Scherer Power Plant,GA,33.07,-83.93,8200000,Power Plant,38,high,8200.0,Scherer
+Puente Hills Landfill,CA,33.99,-117.99,890000,Landfill,39,high,890.0,Puente
+Fresh Kills Landfill,NY,40.58,-74.18,670000,Landfill,40,high,670.0,Fresh

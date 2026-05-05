@@ -1,0 +1,47 @@
+# docker-compose.prod.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_USER: ${DB_USER:-fluxara}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-fluxara_secure_2026}
+      POSTGRES_DB: fluxara
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fluxara"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-fluxara}:${DB_PASSWORD:-fluxara_secure_2026}@db/fluxara
+      REDIS_URL: redis://cache:6379/0
+      PYTHONPATH: .
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: always
+
+  cache:
+    image: redis:7-alpine
+    restart: always
+
+volumes:
+  postgres_data:
