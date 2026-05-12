@@ -9,13 +9,23 @@ export default function FacilityDetail() {
     const { id } = useParams()
     const navigate = useNavigate()
     const [facility, setFacility] = useState(null)
+    const [timeseries, setTimeseries] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        api.getFacility(id)
-            .then(setFacility)
-            .catch(console.error)
-            .finally(() => setLoading(false))
+        const loadDetail = async () => {
+            try {
+                const fac = await api.getFacility(id);
+                setFacility(fac);
+                const ts = await api.getTimeseries(id);
+                setTimeseries(ts);
+            } catch (e) {
+                console.error("Detail fetch failed:", e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadDetail();
     }, [id])
 
     if (loading) return (
@@ -48,11 +58,6 @@ export default function FacilityDetail() {
         </div>
     )
 
-    const mockHistory = {
-        dates: ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'],
-        epa: [800, 800, 800, 800, 800, 800],
-        fluxara: [750, 820, 1100, 950, 880, 1200]
-    }
 
     const cardStyle = {
         background: 'white',
@@ -72,6 +77,25 @@ export default function FacilityDetail() {
         display: 'block'
     }
 
+    const downloadPDF = async () => {
+        try {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const response = await fetch(`${baseUrl}/reports/facility/${id}/pdf`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Fluxara_Audit_${facility.name}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (e) {
+            console.error("PDF download failed:", e);
+        }
+    }
+
     return (
         <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: 'serif' }}>
             <button 
@@ -88,7 +112,25 @@ export default function FacilityDetail() {
                         {facility.state}, {facility.country} · {facility.lat?.toFixed(4) || '0.0000'}, {facility.lon?.toFixed(4) || '0.0000'}
                     </p>
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: 'right', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <button 
+                        onClick={downloadPDF}
+                        style={{
+                            padding: '10px 20px',
+                            borderRadius: '12px',
+                            background: theme.colors.secondary,
+                            color: theme.colors.primary,
+                            border: `1px solid ${theme.colors.primary}`,
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                            transition: 'all 0.2s'
+                        }}
+                        onMouseOver={(e) => { e.target.style.background = theme.colors.primary; e.target.style.color = theme.colors.secondary; }}
+                        onMouseOut={(e) => { e.target.style.background = theme.colors.secondary; e.target.style.color = theme.colors.primary; }}
+                    >
+                        Export PDF Audit
+                    </button>
                     <span style={{
                         padding: '6px 16px',
                         borderRadius: '24px',
@@ -125,7 +167,7 @@ export default function FacilityDetail() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
-                <EmissionChart data={mockHistory} />
+                {timeseries && <EmissionChart data={timeseries} />}
                 <div style={cardStyle}>
                     <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: theme.colors.primary, marginBottom: '1.5rem', margin: 0 }}>Asset Metadata</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>

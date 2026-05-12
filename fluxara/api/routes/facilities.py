@@ -10,7 +10,7 @@ from fluxara.api.auth import verify_api_key
 
 router = APIRouter(prefix="/facilities", tags=["Facilities"])
 
-@router.get("/", response_model=List[FacilitySchema])
+@router.get("", response_model=List[FacilitySchema])
 async def get_facilities(
     db: AsyncSession = Depends(get_db),
     api_key: str = Depends(verify_api_key)

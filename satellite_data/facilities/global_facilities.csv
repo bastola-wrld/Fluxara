@@ -1,0 +1,96 @@
+name,country,region,state,lat,lon,ghg_tonnes,type,id,risk,reported_t_yr,operator,epa,fluxara,lastUpdated
+Pioneer NR Spraberry,USA,Permian Basin,TX,31.85,-102.1,542000,Oil & Gas,1,low,542.0,Pioneer,542000,676365,2024-06-01
+ExxonMobil XTO Permian,USA,Permian Basin,TX,31.7,-102.2,498000,Oil & Gas,2,low,498.0,ExxonMobil,498000,561528,2024-06-01
+Chevron Permian,USA,Permian Basin,TX,32.2,-101.9,412000,Oil & Gas,3,low,412.0,Chevron,412000,561958,2024-06-01
+ConocoPhillips Midland,USA,Permian Basin,TX,32.1,-102.5,398000,Oil & Gas,4,low,398.0,ConocoPhillips,398000,516183,2024-06-01
+Occidental Delaware,USA,Permian Basin,TX,31.9,-102.3,367000,Oil & Gas,5,low,367.0,Occidental,367000,500956,2024-06-01
+Diamondback Energy,USA,Permian Basin,TX,31.6,-102.4,289000,Oil & Gas,6,low,289.0,Diamondback,289000,319039,2024-06-01
+Devon Energy Permian,USA,Permian Basin,TX,31.4,-102.6,245000,Oil & Gas,7,low,245.0,Devon,245000,296122,2024-06-01
+Marathon Oil Permian,USA,Permian Basin,TX,31.3,-102.8,176000,Oil & Gas,8,low,176.0,Marathon,176000,218417,2024-06-01
+EQT Corporation,USA,Appalachian,PA,40.2,-79.8,567000,Natural Gas,9,low,567.0,EQT,567000,656462,2024-06-01
+Range Resources,USA,Appalachian,PA,40.5,-80.2,423000,Natural Gas,10,low,423.0,Range,423000,503678,2024-06-01
+Southwestern Energy,USA,Appalachian,WV,38.9,-81.5,389000,Natural Gas,11,low,389.0,Southwestern,389000,413381,2024-06-01
+CNX Resources,USA,Appalachian,PA,39.8,-80.1,312000,Natural Gas,12,low,312.0,CNX,312000,335373,2024-06-01
+Shell GoM,USA,Gulf of Mexico,LA,28.5,-90.5,756000,Offshore Oil,13,low,756.0,Shell,756000,883616,2024-06-01
+BP GoM,USA,Gulf of Mexico,LA,28.2,-89.8,634000,Offshore Oil,14,low,634.0,BP,634000,662349,2024-06-01
+Chevron GoM,USA,Gulf of Mexico,LA,27.8,-91.2,589000,Offshore Oil,15,low,589.0,Chevron,589000,697522,2024-06-01
+ExxonMobil Baytown,USA,Texas Gulf,TX,29.73,-94.97,4200000,Refinery,16,medium,4200.0,ExxonMobil,4200000,4651849,2024-06-01
+Marathon Galveston Bay,USA,Texas Gulf,TX,29.37,-94.9,3800000,Refinery,17,medium,3800.0,Marathon,3800000,4679150,2024-06-01
+Valero Port Arthur,USA,Texas Gulf,TX,29.9,-93.93,3200000,Refinery,18,medium,3200.0,Valero,3200000,3697019,2024-06-01
+W.A. Parish Power Plant,USA,Texas,TX,29.47,-95.68,8900000,Power Plant,19,high,8900.0,W.A.,8900000,9532712,2024-06-01
+Scherer Power Plant,USA,Georgia,GA,33.07,-83.93,8200000,Power Plant,20,high,8200.0,Scherer,8200000,8826221,2024-06-01
+Gazprom Urengoy,Russia,West Siberia,Yamalo,65.96,78.37,12000000,Natural Gas,21,high,12000.0,Gazprom,12000000,16604755,2024-06-01
+Gazprom Yamburg,Russia,West Siberia,Yamalo,67.99,75.02,9800000,Natural Gas,22,high,9800.0,Gazprom,9800000,13046284,2024-06-01
+Rosneft Samotlor,Russia,West Siberia,Khanty,61.1,76.4,7600000,Oil & Gas,23,high,7600.0,Rosneft,7600000,9092302,2024-06-01
+Rosneft Vankor,Russia,East Siberia,Krasnoyarsk,67.85,83.55,5400000,Oil & Gas,24,high,5400.0,Rosneft,5400000,7171339,2024-06-01
+Lukoil Kogalym,Russia,West Siberia,Khanty,62.26,74.48,4200000,Oil & Gas,25,medium,4200.0,Lukoil,4200000,4735577,2024-06-01
+Novatek Yamal LNG,Russia,Arctic,Yamalo,72.78,68.72,3800000,LNG Terminal,26,medium,3800.0,Novatek,3800000,4825706,2024-06-01
+Aramco Ghawar Field,Saudi Arabia,Eastern Province,EP,25.12,49.2,18000000,Oil & Gas,27,high,18000.0,Aramco,18000000,24291052,2024-06-01
+Aramco Abqaiq Plant,Saudi Arabia,Eastern Province,EP,26.0,49.67,8900000,Oil & Gas,28,high,8900.0,Aramco,8900000,10590907,2024-06-01
+Aramco Ras Tanura Refinery,Saudi Arabia,Eastern Province,EP,26.65,50.15,6700000,Refinery,29,high,6700.0,Aramco,6700000,7475803,2024-06-01
+Aramco Yanbu Refinery,Saudi Arabia,Yanbu,Madinah,24.08,38.05,4200000,Refinery,30,medium,4200.0,Aramco,4200000,4422997,2024-06-01
+ADNOC Bu Hasa,UAE,Abu Dhabi,AD,23.5,53.42,5600000,Oil & Gas,31,high,5600.0,ADNOC,5600000,6302737,2024-06-01
+ADNOC Ruwais Refinery,UAE,Abu Dhabi,AD,24.11,52.73,4100000,Refinery,32,medium,4100.0,ADNOC,4100000,5751203,2024-06-01
+ADNOC Das Island,UAE,Offshore,AD,25.15,52.87,3200000,LNG Terminal,33,medium,3200.0,ADNOC,3200000,3913912,2024-06-01
+NIOC South Pars Gas,Iran,Persian Gulf,Bushehr,27.57,51.77,14000000,Natural Gas,34,high,14000.0,NIOC,14000000,19225958,2024-06-01
+NIOC Ahvaz Field,Iran,Khuzestan,KH,31.32,48.67,9200000,Oil & Gas,35,high,9200.0,NIOC,9200000,10239482,2024-06-01
+Abadan Refinery,Iran,Khuzestan,KH,30.34,48.28,5400000,Refinery,36,high,5400.0,Abadan,5400000,5603214,2024-06-01
+Rumaila Oil Field,Iraq,Basra,Basra,30.2,47.35,11000000,Oil & Gas,37,high,11000.0,Rumaila,11000000,15500674,2024-06-01
+West Qurna Field,Iraq,Basra,Basra,30.53,47.42,8700000,Oil & Gas,38,high,8700.0,West,8700000,11978538,2024-06-01
+Kirkuk Oil Field,Iraq,Kirkuk,Kirkuk,35.47,44.39,6200000,Oil & Gas,39,high,6200.0,Kirkuk,6200000,6968345,2024-06-01
+KOC Burgan Field,Kuwait,South Kuwait,AH,28.97,48.0,9800000,Oil & Gas,40,high,9800.0,KOC,9800000,10163025,2024-06-01
+KNPC Mina Al Ahmadi,Kuwait,South Kuwait,AH,29.07,48.13,5600000,Refinery,41,high,5600.0,KNPC,5600000,6441022,2024-06-01
+Shell Niger Delta,Nigeria,Niger Delta,Rivers,4.85,6.98,8900000,Oil & Gas,42,high,8900.0,Shell,8900000,10575665,2024-06-01
+Chevron Nigeria OML 49,Nigeria,Niger Delta,Delta,5.3,5.48,6700000,Oil & Gas,43,high,6700.0,Chevron,6700000,9082726,2024-06-01
+NLNG Bonny Island,Nigeria,Niger Delta,Rivers,4.44,7.15,5200000,LNG Terminal,44,high,5200.0,NLNG,5200000,7166614,2024-06-01
+Total Nigeria OML 58,Nigeria,Niger Delta,Rivers,4.67,7.23,4100000,Oil & Gas,45,medium,4100.0,Total,4100000,5447386,2024-06-01
+PDVSA Orinoco Belt,Venezuela,Orinoco,Monagas,8.8,-63.2,9200000,Oil & Gas,46,high,9200.0,PDVSA,9200000,11966264,2024-06-01
+PDVSA Lagunillas,Venezuela,Maracaibo,Zulia,10.13,-71.25,6800000,Oil & Gas,47,high,6800.0,PDVSA,6800000,7229350,2024-06-01
+Suncor Oil Sands,Canada,Alberta,AB,57.0,-111.5,19000000,Oil Sands,48,high,19000.0,Suncor,19000000,21988825,2024-06-01
+CNRL Horizon,Canada,Alberta,AB,57.38,-111.73,14000000,Oil Sands,49,high,14000.0,CNRL,14000000,19173507,2024-06-01
+Imperial Kearl,Canada,Alberta,AB,57.28,-111.65,8900000,Oil Sands,50,high,8900.0,Imperial,8900000,12180105,2024-06-01
+Cenovus Foster Creek,Canada,Alberta,AB,54.75,-110.4,6700000,Oil Sands,51,high,6700.0,Cenovus,6700000,8388462,2024-06-01
+Woodside Pluto LNG,Australia,Pilbara,WA,-20.63,116.71,5600000,LNG Terminal,52,high,5600.0,Woodside,5600000,7439046,2024-06-01
+Chevron Gorgon LNG,Australia,Pilbara,WA,-21.74,114.17,7200000,LNG Terminal,53,high,7200.0,Chevron,7200000,8021203,2024-06-01
+Santos Darwin LNG,Australia,NT,NT,-12.47,130.85,3800000,LNG Terminal,54,medium,3800.0,Santos,3800000,4584081,2024-06-01
+BHP Olympic Dam,Australia,SA,SA,-30.44,136.89,2900000,Mining,55,medium,2900.0,BHP,2900000,3415876,2024-06-01
+Sinopec Shengli Field,China,Shandong,SD,37.47,118.47,8900000,Oil & Gas,56,high,8900.0,Sinopec,8900000,9520500,2024-06-01
+CNPC Daqing Field,China,Heilongjiang,HLJ,46.6,125.0,7600000,Oil & Gas,57,high,7600.0,CNPC,7600000,10347349,2024-06-01
+CNOOC Bohai Bay,China,Bohai,Offshore,38.8,120.5,5400000,Offshore Oil,58,high,5400.0,CNOOC,5400000,6325428,2024-06-01
+Datang Duolun Power,China,Inner Mongolia,NMG,42.19,116.47,12000000,Power Plant,59,high,12000.0,Datang,12000000,14535622,2024-06-01
+Guodian Tuoketuo,China,Inner Mongolia,NMG,40.27,111.07,11000000,Power Plant,60,high,11000.0,Guodian,11000000,14966897,2024-06-01
+ONGC Mumbai High,India,Offshore,MH,19.07,71.28,5600000,Offshore Oil,61,high,5600.0,ONGC,5600000,7310943,2024-06-01
+Reliance Jamnagar Refinery,India,Gujarat,GJ,22.47,70.06,8900000,Refinery,62,high,8900.0,Reliance,8900000,10265910,2024-06-01
+NTPC Vindhyachal Power,India,MP,MP,24.11,82.67,14000000,Power Plant,63,high,14000.0,NTPC,14000000,17079468,2024-06-01
+NTPC Rihand Power,India,UP,UP,24.03,83.02,12000000,Power Plant,64,high,12000.0,NTPC,12000000,15978688,2024-06-01
+Equinor Johan Sverdrup,Norway,North Sea,Offshore,58.8,2.52,890000,Offshore Oil,65,low,890.0,Equinor,890000,958345,2024-06-01
+Equinor Troll Field,Norway,North Sea,Offshore,60.64,3.72,1200000,Natural Gas,66,medium,1200.0,Equinor,1200000,1544229,2024-06-01
+BP Schiehallion,UK,North Sea,Offshore,60.13,-3.95,760000,Offshore Oil,67,low,760.0,BP,760000,899895,2024-06-01
+Shell Shearwater,UK,North Sea,Offshore,57.91,1.79,650000,Offshore Oil,68,low,650.0,Shell,650000,824660,2024-06-01
+Harbour Energy Clair,UK,North Sea,Offshore,60.55,-2.01,540000,Offshore Oil,69,low,540.0,Harbour,540000,635213,2024-06-01
+Drax Power Station,UK,Yorkshire,ENG,53.74,-1.02,3200000,Power Plant,70,medium,3200.0,Drax,3200000,3547060,2024-06-01
+Ratcliffe Power Station,UK,Midlands,ENG,52.87,-1.25,2800000,Power Plant,71,medium,2800.0,Ratcliffe,2800000,3164787,2024-06-01
+Grangemouth Refinery,UK,Scotland,SCO,56.01,-3.71,1900000,Refinery,72,medium,1900.0,Grangemouth,1900000,2439278,2024-06-01
+RWE Neurath Power,Germany,NRW,NRW,50.95,6.57,28000000,Power Plant,73,high,28000.0,RWE,28000000,38655658,2024-06-01
+RWE Niederaussem,Germany,NRW,NRW,50.95,6.65,24000000,Power Plant,74,high,24000.0,RWE,24000000,31367346,2024-06-01
+BASF Ludwigshafen,Germany,Baden,RP,49.47,8.44,4200000,Chemical Plant,75,medium,4200.0,BASF,4200000,4541768,2024-06-01
+Shell Pernis Refinery,Netherlands,Rotterdam,ZH,51.88,4.37,7800000,Refinery,76,high,7800.0,Shell,7800000,8040405,2024-06-01
+Groningen Gas Field,Netherlands,Groningen,GR,53.24,6.83,5600000,Natural Gas,77,high,5600.0,Groningen,5600000,6462480,2024-06-01
+Petrobras Tupi Pre-salt,Brazil,Santos Basin,RJ,-23.56,-43.87,8900000,Offshore Oil,78,high,8900.0,Petrobras,8900000,12132000,2024-06-01
+Petrobras Campos Basin,Brazil,Campos,RJ,-22.0,-40.5,7600000,Offshore Oil,79,high,7600.0,Petrobras,7600000,10203420,2024-06-01
+Vale Carajas Mine,Brazil,Para,PA,-6.07,-50.17,5400000,Mining,80,high,5400.0,Vale,5400000,6032414,2024-06-01
+Tengizchevroil,Kazakhstan,Atyrau,ATY,45.47,53.11,12000000,Oil & Gas,81,high,12000.0,Tengizchevroil,12000000,15256582,2024-06-01
+Karachaganak Field,Kazakhstan,WKO,WKO,51.58,53.62,8900000,Oil & Gas,82,high,8900.0,Karachaganak,8900000,11419901,2024-06-01
+Kashagan Field,Kazakhstan,Atyrau,ATY,45.52,52.08,7600000,Offshore Oil,83,high,7600.0,Kashagan,7600000,9490415,2024-06-01
+Pemex Cantarell Field,Mexico,Gulf Mexico,CAM,19.65,-91.97,9800000,Offshore Oil,84,high,9800.0,Pemex,9800000,11887150,2024-06-01
+Pemex Ku-Maloob-Zaap,Mexico,Gulf Mexico,CAM,19.88,-91.75,7600000,Offshore Oil,85,high,7600.0,Pemex,7600000,9242440,2024-06-01
+Pemex Salina Cruz Refinery,Mexico,Oaxaca,OAX,16.18,-95.18,4200000,Refinery,86,medium,4200.0,Pemex,4200000,5552274,2024-06-01
+Sonatrach Hassi Messaoud,Algeria,Sahara,OUA,31.67,6.07,7800000,Oil & Gas,87,high,7800.0,Sonatrach,7800000,8413288,2024-06-01
+Sonatrach Hassi R'Mel,Algeria,Sahara,LAG,32.95,3.27,6700000,Natural Gas,88,high,6700.0,Sonatrach,6700000,7984933,2024-06-01
+QatarEnergy North Field,Qatar,Offshore,QA,25.9,51.95,21000000,Natural Gas,89,high,21000.0,QatarEnergy,21000000,28627277,2024-06-01
+Ras Laffan LNG,Qatar,North Qatar,QA,25.9,51.57,8900000,LNG Terminal,90,high,8900.0,Ras,8900000,9757438,2024-06-01
+Pertamina Rokan Block,Indonesia,Sumatra,Riau,1.35,101.45,5600000,Oil & Gas,91,high,5600.0,Pertamina,5600000,6682471,2024-06-01
+Bontang LNG,Indonesia,Kalimantan,EK,0.13,117.48,4200000,LNG Terminal,92,medium,4200.0,Bontang,4200000,5663652,2024-06-01
+Sasol Secunda,South Africa,Mpumalanga,MP,-26.53,29.18,56000000,Chemical Plant,93,high,56000.0,Sasol,56000000,67672291,2024-06-01
+Eskom Kendal Power,South Africa,Mpumalanga,MP,-26.09,29.14,38000000,Power Plant,94,high,38000.0,Eskom,38000000,43705954,2024-06-01
+Eskom Lethabo Power,South Africa,Free State,FS,-26.8,27.75,35000000,Power Plant,95,high,35000.0,Eskom,35000000,42737972,2024-06-01

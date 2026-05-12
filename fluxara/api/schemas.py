@@ -1,82 +1,130 @@
-# fluxara/api/schemas.py
-from pydantic import BaseModel, Field, EmailStr
+# FIX #3 — fluxara/api/schemas.py
+# Problems:
+#   a) routes.py (legacy) returns extra fields not in InversionResponse
+#   b) Pydantic v2 deprecation: class Config → model_config = ConfigDict(...)
+# Apply by replacing fluxara/api/schemas.py with this file.
+
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 from datetime import datetime, date
 
-# ── Inversion ──────────────────────────────────────────
+
+# ── Inversion ──────────────────────────────────────────────────────────────
+
 class InversionRequest(BaseModel):
-    latitude: float = Field(..., ge=-90, le=90)
+    latitude:  float = Field(..., ge=-90,  le=90)
     longitude: float = Field(..., ge=-180, le=180)
-    date: date  # Pydantic handles YYYY-MM-DD strings automatically
-    bbox_deg: float = 2.0
+    date:      date                             # Pydantic handles YYYY-MM-DD
+    bbox_deg:  float = Field(2.0, gt=0, le=10)
+
 
 class InversionResponse(BaseModel):
-    top_facility: str
+    """
+    Core response — matches routes/invert.py exactly.
+    All fields are required; no optional surprises.
+    """
+    top_facility:        str
     emission_rate_kg_hr: float
-    uncertainty_1sigma: float
-    confidence: float
-    compute_time_ms: int
+    uncertainty_1sigma:  float
+    confidence:          float
+    compute_time_ms:     int
 
-# ── Facility ──────────────────────────────────────────
+
+# ── Facility ───────────────────────────────────────────────────────────────
+
 class FacilitySchema(BaseModel):
-    id: int
-    name: str
-    state: Optional[str]
-    country: Optional[str]
-    lat: float
-    lon: float
-    epa_reported: Optional[float]
-    fluxara_latest: Optional[float]
-    risk_level: Optional[str]
-    sector: Optional[str]
-    ghgrp_id: Optional[str]
+    model_config = ConfigDict(from_attributes=True)   # replaces class Config
 
-    class Config:
-        from_attributes = True
+    id:              int
+    name:            str
+    state:           Optional[str]   = None
+    country:         Optional[str]   = None
+    lat:             float
+    lon:             float
+    epa_reported:    Optional[float] = None
+    fluxara_latest:  Optional[float] = None
+    risk_level:      Optional[str]   = None
+    sector:          Optional[str]   = None
+    ghgrp_id:        Optional[str]   = None
 
-# ── Alert ──────────────────────────────────────────
+
+# ── Alert ──────────────────────────────────────────────────────────────────
+
 class AlertSchema(BaseModel):
-    id: int
-    facility_id: int
-    facility_name: Optional[str] = None
-    alert_type: str
-    severity: str
-    message: str
-    emission_value: Optional[float]
-    threshold_value: Optional[float]
-    resolved: bool
-    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+    id:               int
+    facility_id:      int
+    facility_name:    Optional[str]   = None
+    alert_type:       str
+    severity:         str
+    message:          str
+    emission_value:   Optional[float] = None
+    threshold_value:  Optional[float] = None
+    resolved:         bool
+    created_at:       datetime
+
 
 class AlertCountResponse(BaseModel):
     unresolved: int
 
-# ── Report ──────────────────────────────────────────
+
+# ── Report ──────────────────────────────────────────────────────────────────
+
 class ReportSchema(BaseModel):
-    id: int
-    facility_id: int
-    facility_name: Optional[str] = None
-    report_type: str
-    date_from: Optional[date]
-    date_to: Optional[date]
-    total_emissions: Optional[float]
-    status: str
-    pdf_path: Optional[str]
-    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+    id:               int
+    facility_id:      int
+    facility_name:    Optional[str]   = None
+    report_type:      str
+    date_from:        Optional[date]  = None
+    date_to:          Optional[date]  = None
+    total_emissions:  Optional[float] = None
+    status:           str
+    pdf_path:         Optional[str]   = None
+    created_at:       datetime
 
-# ── User ──────────────────────────────────────────
+
+class GeneratedReportSchema(BaseModel):
+    """Metadata-only schema for listing generated reports (excludes pdf_data binary)."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id:               int
+    title:            str
+    report_type:      str
+    region:           Optional[str]   = None
+    org_id:           Optional[int]   = None
+    facility_id:      Optional[int]   = None
+    date_from:        Optional[date]  = None
+    date_to:          Optional[date]  = None
+    total_facilities: Optional[int]   = None
+    total_emissions:  Optional[float] = None
+    file_size:        Optional[int]   = None
+    generated_by:     Optional[int]   = None
+    created_at:       datetime
+
+
+class GenerateReportRequest(BaseModel):
+    """Request body for admin PDF generation."""
+    report_type:  str = Field(..., description="summary | full | compliance")
+    region:       Optional[str]  = Field(None, description="Country code or 'Global'")
+    org_id:       Optional[int]  = Field(None, description="Scope to one organisation")
+    facility_id:  Optional[int]  = Field(None, description="Scope to one facility")
+    date_from:    Optional[date] = None
+    date_to:      Optional[date] = None
+
+
+# ── User ───────────────────────────────────────────────────────────────────
+
 class UserSchema(BaseModel):
-    id: int
-    email: EmailStr
-    company: Optional[str]
-    role: str
+    id:         int
+    email:      str
+    company:    Optional[str] = None
+    role:       str
     created_at: datetime
+
 
 class Token(BaseModel):
     access_token: str
-    token_type: str
+    token_type:   str

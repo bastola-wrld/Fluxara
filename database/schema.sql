@@ -74,6 +74,24 @@ CREATE TABLE IF NOT EXISTS users (
     created_at      TIMESTAMP DEFAULT NOW()
 );
 
+-- TABLE: generated_reports (admin-generated PDFs stored as binary)
+CREATE TABLE IF NOT EXISTS generated_reports (
+    id              SERIAL PRIMARY KEY,
+    title           VARCHAR(255) NOT NULL,
+    report_type     VARCHAR(50) NOT NULL,   -- summary/full/compliance
+    region          VARCHAR(100),           -- country code or 'Global'
+    org_id          INTEGER REFERENCES organisations(id),
+    facility_id     INTEGER REFERENCES facilities(id),
+    date_from       DATE,
+    date_to         DATE,
+    total_facilities INTEGER,
+    total_emissions DOUBLE PRECISION,
+    pdf_data        BYTEA NOT NULL,         -- binary PDF content
+    file_size       INTEGER,
+    generated_by    INTEGER REFERENCES users(id),
+    created_at      TIMESTAMP DEFAULT NOW()
+);
+
 -- PostGIS spatial index
 CREATE INDEX IF NOT EXISTS facilities_location_idx 
 ON facilities USING GIST(location);

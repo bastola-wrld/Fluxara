@@ -27,3 +27,19 @@ def regrid_to_common_grid(data, source_lats, source_lons, target_lats, target_lo
     
     regridded = interp(points).reshape(len(target_lats), len(target_lons))
     return regridded.astype(np.float32)
+
+def prepare_model_input(wind_tensor, ch4_grid):
+    """
+    Prepare tensor for model inference.
+    Input: wind [6, 64, 64], methane [64, 64]
+    Output: [1, 6, 64, 64] torch tensor
+    """
+    import torch
+    if isinstance(wind_tensor, np.ndarray):
+        wind_tensor = torch.from_numpy(wind_tensor)
+    
+    # Ensure it's [6, 64, 64]
+    if wind_tensor.ndim == 3:
+        return wind_tensor.unsqueeze(0)
+    return wind_tensor
+

@@ -119,3 +119,7 @@ docs/generated/
 # ─── Normalization stats (auto-generated, not source) ─────────────────────────
 satellite_data/normalization_stats.json
 satellite_data/test_normalization_stats.json
+
+# Logs
+backend.log
+*.log

@@ -12,7 +12,7 @@ from fluxara.api.auth import verify_api_key
 
 router = APIRouter(prefix="/alerts", tags=["Alerts"])
 
-@router.get("/", response_model=List[AlertSchema])
+@router.get("", response_model=List[AlertSchema])
 async def get_alerts(
     resolved: bool = Query(False),
     db: AsyncSession = Depends(get_db),
