@@ -1,0 +1,13 @@
+{"_note": "HAND WRITTEN TEST VALUES, not a NASA measurement. See README.md.",
+ "crs": {"properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}, "type": "name"},
+ "name": "methane_metadata", "type": "FeatureCollection",
+ "features": [{"type": "Feature",
+  "geometry": {"type": "Polygon", "coordinates": [[[-102.05, 32.246], [-102.053, 32.242], [-102.049, 32.235], [-102.042, 32.243], [-102.05, 32.246]]]},
+  "properties": {"Plume ID": "CH4_PlumeComplex-3374", "Orbit": "2526514", "DCID": "2526514006",
+   "DAAC Scene Names": ["EMIT_L2B_CH4ENH_V002_20250922T204933_2526514_006"],
+   "UTC Time Observed": "2025-09-22T20:49:33Z",
+   "Max Plume Concentration (ppm m)": 1234.5,
+   "Latitude of max concentration": 32.2412, "Longitude of max concentration": -102.0489,
+   "Wind Speed (m/s)": 4.2, "Wind Speed Std (m/s)": 0.9, "Wind Speed Source": "hrrr",
+   "Emissions Rate Estimate (kg/hr)": 1000.0, "Emissions Rate Estimate Uncertainty (kg/hr)": 300.0,
+   "Fetch Length (m)": 1250.0}}]}

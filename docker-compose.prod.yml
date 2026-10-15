@@ -1,17 +1,16 @@
 # docker-compose.prod.yml
-version: '3.8'
-
+# Production. All secrets come from the environment. There are no defaults.
 services:
   db:
-    image: postgis/postgis:15-3.3
+    image: postgis/postgis:16-3.4
     environment:
-      POSTGRES_USER: ${DB_USER:-fluxara}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-fluxara_secure_2026}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
       POSTGRES_DB: fluxara
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U fluxara"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,9 +20,11 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgresql+asyncpg://${DB_USER:-fluxara}:${DB_PASSWORD:-fluxara_secure_2026}@db/fluxara
-      REDIS_URL: redis://cache:6379/0
-      PYTHONPATH: .
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:?set POSTGRES_USER}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db/fluxara
+      FLUXARA_ENV: production
+      FLUXARA_SECRET_KEY: ${FLUXARA_SECRET_KEY:?set FLUXARA_SECRET_KEY}
+      FLUXARA_CORS_ORIGINS: ${FLUXARA_CORS_ORIGINS:?set FLUXARA_CORS_ORIGINS}
+      EARTHDATA_TOKEN: ${EARTHDATA_TOKEN:-}
     depends_on:
       db:
         condition: service_healthy
@@ -39,8 +40,17 @@ services:
       - api
     restart: always
 
-  cache:
-    image: redis:7-alpine
+  fetcher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:?set POSTGRES_USER}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db/fluxara
+      FLUXARA_SECRET_KEY: ${FLUXARA_SECRET_KEY:?set FLUXARA_SECRET_KEY}
+      EARTHDATA_TOKEN: ${EARTHDATA_TOKEN:-}
+    command: python -m fluxara.data.daily_fetch
+    depends_on:
+      - api
     restart: always
 
 volumes:

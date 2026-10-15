@@ -47,7 +47,7 @@ export default function FacilityTable({ facilities, selected, onSelect }) {
                         </div>
                         <div style={{ textAlign: 'right' }}>
                             <p style={{ fontSize: '0.85rem', fontWeight: 'bold', color: theme.colors.primary, margin: 0 }}>
-                                {f.fluxara_latest?.toLocaleString() || 0} <span style={{ fontSize: '0.6rem', fontWeight: 'normal', opacity: 0.6 }}>kg/hr</span>
+                                {f.fluxara_latest != null ? f.fluxara_latest.toLocaleString() : 'No data'} <span style={{ fontSize: '0.6rem', fontWeight: 'normal', opacity: 0.6 }}>kg/hr</span>
                             </p>
                             <span style={{
                                 fontSize: '0.5rem',

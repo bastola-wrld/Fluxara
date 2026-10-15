@@ -162,7 +162,7 @@ export default function CompanyPanel() {
                                 <td style={{ padding: '1rem', fontWeight: 'bold' }}>{f.name}</td>
                                 <td style={{ padding: '1rem' }}>{f.sector}</td>
                                 <td style={{ padding: '1rem' }}>{f.epa_reported} kg/hr</td>
-                                <td style={{ padding: '1rem' }}>{f.fluxara_latest} kg/hr</td>
+                                <td style={{ padding: '1rem' }}>{f.fluxara_latest != null ? `${f.fluxara_latest} kg/hr` : 'No data'}</td>
                                 <td style={{ padding: '1rem' }}>
                                     <span style={{ color: f.discrepancy_pct > 20 ? theme.colors.riskHigh : theme.colors.text }}>
                                         {f.discrepancy_pct}%

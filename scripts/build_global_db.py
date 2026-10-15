@@ -144,10 +144,7 @@ df_global["risk"]         = df_global["ghg_tonnes"].apply(
 )
 df_global["reported_t_yr"] = (df_global["ghg_tonnes"] / 1000).round(1)
 df_global["operator"]      = df_global["name"].apply(lambda x: x.split()[0])
-df_global["epa"]           = df_global["ghg_tonnes"]
-df_global["fluxara"]       = (df_global["ghg_tonnes"] *
-                               np.random.uniform(1.03, 1.42, len(df_global))).astype(int)
-df_global["lastUpdated"]   = "2024-06-01"
+df_global["data_source"]  = "manual_unverified"
 
 csv_path  = f"{facilities_dir}/global_facilities.csv"
 json_path = f"{facilities_dir}/global_facilities.json"

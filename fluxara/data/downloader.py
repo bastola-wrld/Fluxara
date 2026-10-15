@@ -100,16 +100,3 @@ class CDSDownloader:
             
             for _ in tqdm(tasks, desc="Cloud Data Acquisition"):
                 pass # Results logged internally
-
-# ── Mock Functions for Development ──────────────────────────────────────────
-
-def download_tropomi(date, bbox=None):
-    """Mock TROPOMI download."""
-    logger.info(f"MOCK: Downloaded TROPOMI for {date}")
-    return "satellite_data/mock_tropomi.nc"
-
-def download_era5(date, bbox=None):
-    """Mock ERA5 download."""
-    logger.info(f"MOCK: Downloaded ERA5 for {date}")
-    return "satellite_data/mock_era5.nc"
-

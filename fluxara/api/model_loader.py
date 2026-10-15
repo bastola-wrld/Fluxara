@@ -11,28 +11,21 @@ _MODEL = None
 _ENSEMBLE = None
 
 def get_ensemble():
+    """
+    Load the legacy research model. Raises if there are no trained weights.
+    It never falls back to a randomly initialised network.
+    """
     global _MODEL, _ENSEMBLE
     if _ENSEMBLE is not None:
         return _ENSEMBLE
 
     ckpt_path = "checkpoints/fluxara_best.pt"
-    _MODEL = FluxaraInversionNet()
-    
-    if os.path.exists(ckpt_path):
-        try:
-            ckpt = torch.load(ckpt_path, map_location='cpu')
-            # Handle potential dictionary vs raw state_dict
-            _MODEL.load_state_dict(ckpt.get("model_state_dict", ckpt))
-            _MODEL.eval()
-            _ENSEMBLE = BayesianEnsemble(_MODEL)
-            
-            epoch = ckpt.get("epoch", "Unknown") if isinstance(ckpt, dict) else "Unknown"
-            logger.info(f"✅ Model loaded successfully (Epoch {epoch})")
-        except Exception as e:
-            logger.error(f"❌ Failed to load model weights: {e}")
-            _ENSEMBLE = BayesianEnsemble(_MODEL) # Mock mode (random weights)
-    else:
-        logger.warning("⚠️ No model checkpoint found. Running in mock mode.")
-        _ENSEMBLE = BayesianEnsemble(_MODEL)
-
+    if not os.path.exists(ckpt_path):
+        raise FileNotFoundError(
+            f"No model checkpoint at {ckpt_path}. The legacy inversion cannot run.")
+    model = FluxaraInversionNet()
+    ckpt = torch.load(ckpt_path, map_location="cpu")
+    model.load_state_dict(ckpt.get("model_state_dict", ckpt))
+    model.eval()
+    _MODEL, _ENSEMBLE = model, BayesianEnsemble(model)
     return _ENSEMBLE

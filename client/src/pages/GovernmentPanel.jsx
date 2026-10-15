@@ -133,7 +133,7 @@ export default function GovernmentPanel() {
                         <td style={{ padding: '1rem' }}>{f.country}</td>
                         <td style={{ padding: '1rem' }}>{f.sector}</td>
                         <td style={{ padding: '1rem' }}>{f.epa_reported}</td>
-                        <td style={{ padding: '1rem' }}>{f.fluxara_latest}</td>
+                        <td style={{ padding: '1rem' }}>{f.fluxara_latest ?? 'No data'}</td>
                         <td style={{ padding: '1rem' }}>
                             <span style={{ 
                                 padding: '4px 8px', 

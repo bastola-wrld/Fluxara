@@ -1,3 +1,4 @@
+import os
 # fluxara/api/routes/reports.py
 """
 Report endpoints:
@@ -35,6 +36,22 @@ from fluxara.reports.auto_generator import (
 )
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
+
+# The current PDF templates are built on facilities.fluxara_latest and print
+# "0.0 kg/hr" and "LOW" risk for sites that have no satellite data at all.
+# Until the templates are rebuilt on plume_detections, generating a PDF is
+# switched off so that no report can state a number we did not observe.
+LEGACY_REPORTS = os.getenv("FLUXARA_ENABLE_LEGACY_REPORTS", "false").lower() == "true"
+
+
+def reports_enabled():
+    if not LEGACY_REPORTS:
+        raise HTTPException(
+            status_code=503,
+            detail="PDF reports are being rebuilt on real satellite observations "
+                   "and are switched off for now.",
+        )
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -139,7 +156,7 @@ async def download_global_pdf(user=Depends(get_current_user)):
 # ADMIN: TRIGGER REGENERATION
 # ══════════════════════════════════════════════════════════════════════════════
 
-@router.post("/regenerate")
+@router.post("/regenerate", dependencies=[Depends(reports_enabled)])
 async def trigger_regeneration(user=Depends(get_current_user)):
     """Admin-only: Trigger an immediate regeneration of all PDFs."""
     if user.role != "admin":
@@ -156,7 +173,7 @@ async def trigger_regeneration(user=Depends(get_current_user)):
 # ADMIN: ON-DEMAND CUSTOM PDF GENERATION (stored in DB)
 # ══════════════════════════════════════════════════════════════════════════════
 
-@router.post("/generate", response_model=GeneratedReportSchema)
+@router.post("/generate", response_model=GeneratedReportSchema, dependencies=[Depends(reports_enabled)])
 async def generate_on_demand_report(
     body: GenerateReportRequest,
     db: AsyncSession = Depends(get_db),
@@ -366,7 +383,7 @@ async def delete_generated_report(
 # pre-generated files when available for instant response)
 # ══════════════════════════════════════════════════════════════════════════════
 
-@router.get("/facility/{facility_id}/pdf")
+@router.get("/facility/{facility_id}/pdf", dependencies=[Depends(reports_enabled)])
 async def get_facility_report_pdf(
     facility_id: int,
     db: AsyncSession = Depends(get_db),
@@ -424,7 +441,7 @@ async def get_facility_report_pdf(
     )
 
 
-@router.get("/company/{org_id}/pdf")
+@router.get("/company/{org_id}/pdf", dependencies=[Depends(reports_enabled)])
 async def get_company_report_pdf(
     org_id: int,
     db: AsyncSession = Depends(get_db),

@@ -1,4 +1,5 @@
 # fluxara/api/auth.py
+import hmac
 import os
 import jwt
 import bcrypt
@@ -12,7 +13,15 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 from fluxara.database.connection import get_db
 from fluxara.database.models import User
 
-SECRET_KEY = os.getenv("FLUXARA_SECRET_KEY", "fluxara-super-secret-2024")
+FLUXARA_ENV = os.getenv("FLUXARA_ENV", "production").lower()
+IS_DEV = FLUXARA_ENV == "development"
+
+SECRET_KEY = os.getenv("FLUXARA_SECRET_KEY")
+if not SECRET_KEY or len(SECRET_KEY) < 32:
+    raise RuntimeError(
+        "FLUXARA_SECRET_KEY must be set to a random string of at least 32 "
+        "characters. Generate one with:  python -c \"import secrets; print(secrets.token_urlsafe(48))\""
+    )
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
@@ -20,7 +29,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 API_KEY_NAME = "X-API-Key"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
-DEV_KEY = os.getenv("FLUXARA_DEV_KEY", "fluxara-dev-key-2024")
+# A shared admin key for local development only. It is ignored unless
+# FLUXARA_ENV=development, and it has no built in default value.
+DEV_KEY = os.getenv("FLUXARA_DEV_KEY") if IS_DEV else None
 
 
 def verify_password(plain_password: str, hashed_password: str):
@@ -50,7 +61,7 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db)
 ):
     # ── Try API Key First (Legacy/Dev) ──────────────────────────────────────
-    if api_key == DEV_KEY:
+    if DEV_KEY and api_key and hmac.compare_digest(api_key, DEV_KEY):
         # Mock admin user for dev key
         return User(id=0, email="admin@fluxara.dev", role="admin", active=True)
 

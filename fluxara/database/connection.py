@@ -7,10 +7,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Ensure we use the asyncpg driver
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+asyncpg://fluxara:fluxara123@localhost:5433/fluxara"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL is not set. Copy .env.example to .env and fill it in."
+    )
 
 # Fix for common issue where DATABASE_URL might still be sync (postgresql://)
 if DATABASE_URL.startswith("postgresql://"):

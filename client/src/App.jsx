@@ -5,7 +5,7 @@ import MetricCards from './components/metriccards'
 import FacilityTable from './components/facilitytable'
 import Map from './components/map'
 import EmissionChart from './components/emissionchart'
-import InvertPanel from './components/invertpanel'
+import InvertPanel from './components/InvertPanel'
 
 // Pages
 import FacilityDetail from './pages/FacilityDetail'

@@ -1,0 +1,118 @@
+{
+ "_note": "Real response from Copernicus Data Space STAC, recorded 2026-10-06. One item, assets trimmed.",
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525",
+   "bbox": [
+    5.807047646128257,
+    31.50774539980853,
+    6.614403823810227,
+    32.513568166876354
+   ],
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       6.6144038238102265,
+       32.513568166876354
+      ],
+      [
+       5.807047646128258,
+       32.496813532418855
+      ],
+      [
+       5.841179287421928,
+       31.50774539980853
+      ],
+      [
+       6.3174359007079675,
+       31.51736089287751
+      ],
+      [
+       6.6144038238102265,
+       32.513568166876354
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "gsd": 10,
+    "datetime": "2026-09-09T10:17:01.024000Z",
+    "platform": "sentinel-2a",
+    "grid:code": "MGRS-32SKA",
+    "instruments": [
+     "msi"
+    ],
+    "product:type": "S2MSI1C",
+    "constellation": "sentinel-2",
+    "eo:cloud_cover": 0.0,
+    "processing:level": "L1",
+    "processing:version": "05.12",
+    "sat:absolute_orbit": 58578,
+    "sat:relative_orbit": 65
+   },
+   "assets": {
+    "B11": {
+     "href": "s3://eodata/Sentinel-2/MSI/L1C/2026/09/09/S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE/GRANULE/L1C_T32SKA_A058578_20260909T103201/IMG_DATA/T32SKA_20260909T101701_B11.jp2",
+     "alternate": {
+      "https": {
+       "href": "https://download.dataspace.copernicus.eu/odata/v1/Products(9b5eb1cd-f39e-475f-9b90-743f5ff025c4)/Nodes(S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE)/Nodes(GRANULE)/Nodes(L1C_T32SKA_A058578_20260909T103201)/Nodes(IMG_DATA)/Nodes(T32SKA_20260909T101701_B11.jp2)/$value",
+       "auth:refs": [
+        "oidc"
+       ]
+      }
+     },
+     "gsd": 20,
+     "type": "image/jp2",
+     "proj:code": "EPSG:32632",
+     "raster:scale": 0.0001,
+     "raster:offset": -0.1
+    },
+    "B12": {
+     "href": "s3://eodata/Sentinel-2/MSI/L1C/2026/09/09/S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE/GRANULE/L1C_T32SKA_A058578_20260909T103201/IMG_DATA/T32SKA_20260909T101701_B12.jp2",
+     "alternate": {
+      "https": {
+       "href": "https://download.dataspace.copernicus.eu/odata/v1/Products(9b5eb1cd-f39e-475f-9b90-743f5ff025c4)/Nodes(S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE)/Nodes(GRANULE)/Nodes(L1C_T32SKA_A058578_20260909T103201)/Nodes(IMG_DATA)/Nodes(T32SKA_20260909T101701_B12.jp2)/$value",
+       "auth:refs": [
+        "oidc"
+       ]
+      }
+     },
+     "gsd": 20,
+     "type": "image/jp2",
+     "proj:code": "EPSG:32632",
+     "raster:scale": 0.0001,
+     "raster:offset": -0.1
+    },
+    "TCI": {
+     "href": "s3://eodata/Sentinel-2/MSI/L1C/2026/09/09/S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE/GRANULE/L1C_T32SKA_A058578_20260909T103201/IMG_DATA/T32SKA_20260909T101701_TCI.jp2",
+     "alternate": {
+      "https": {
+       "href": "https://download.dataspace.copernicus.eu/odata/v1/Products(9b5eb1cd-f39e-475f-9b90-743f5ff025c4)/Nodes(S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525.SAFE)/Nodes(GRANULE)/Nodes(L1C_T32SKA_A058578_20260909T103201)/Nodes(IMG_DATA)/Nodes(T32SKA_20260909T101701_TCI.jp2)/$value",
+       "auth:refs": [
+        "oidc"
+       ]
+      }
+     },
+     "gsd": 10,
+     "type": "image/jp2",
+     "proj:code": "EPSG:32632"
+    },
+    "thumbnail": {
+     "href": "https://example.invalid/t.jpg"
+    }
+   }
+  }
+ ],
+ "links": [
+  {
+   "rel": "next",
+   "type": "application/geo+json",
+   "method": "GET",
+   "href": "https://stac.dataspace.copernicus.eu/v1/search?bbox=5.9,31.5,6.3,31.9&collections=sentinel-2-l1c&datetime=2026-09-01T00:00:00Z/2026-09-10T00:00:00Z&limit=1&token=next:sentinel-2-l1c:S2A_MSIL1C_20260909T101701_N0512_R065_T32SKA_20260909T171525"
+  }
+ ]
+}

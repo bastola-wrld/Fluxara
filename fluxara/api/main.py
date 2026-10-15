@@ -1,176 +1,120 @@
 # fluxara/api/main.py
-from fastapi import FastAPI
+import asyncio
+import logging
+import os
+
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fluxara.api.routes import facilities, alerts, reports, invert, timeseries
+from fastapi.responses import JSONResponse
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from fluxara.api.routes import facilities, alerts, reports, timeseries, plumes
 from fluxara.api.routes import admin, company, government, auth
-from fluxara.database.connection import engine
-from fluxara.database.models import Base
+from fluxara.database.connection import get_db
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("fluxara")
+
+LEGACY_INVERSION = os.getenv("FLUXARA_ENABLE_LEGACY_INVERSION", "false").lower() == "true"
+AUTO_PDFS = (os.getenv("FLUXARA_AUTO_GENERATE_PDFS", "false").lower() == "true"
+             and os.getenv("FLUXARA_ENABLE_LEGACY_REPORTS", "false").lower() == "true")
 
 app = FastAPI(
-    title="Fluxara API v1.0",
-    description="Real-time satellite greenhouse gas attribution",
-    version="1.0.0",
+    title="Fluxara API",
+    description="Methane observations from open satellite data, with sources and uncertainty.",
+    version="0.2.0",
 )
 
-import torch
-import os
-import asyncio
-from fluxara.models.inversion import FluxaraInversionNet
-from fluxara.models.bayesian import BayesianEnsemble
-import fluxara.api.routes.invert as invert_module
-
-
-# CORS Configuration
+# CORS: list the exact frontend origins, comma separated. No wildcard, because
+# the API accepts credentials.
+_origins = [o.strip() for o in os.getenv("FLUXARA_CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allow all origins for local development unblocking
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include Routers with /v1 prefix
 app.include_router(facilities.router, prefix="/v1")
 app.include_router(alerts.router, prefix="/v1")
 app.include_router(reports.router, prefix="/v1")
-app.include_router(invert.router)
 app.include_router(timeseries.router, prefix="/v1")
-
+app.include_router(plumes.router, prefix="/v1")
 app.include_router(admin.router)
 app.include_router(company.router)
 app.include_router(government.router)
 app.include_router(auth.router)
 
-from fastapi import Request
-from fastapi.responses import JSONResponse
-import logging
+if LEGACY_INVERSION:
+    # Needs torch. Experimental research code, off by default.
+    from fluxara.api.routes import invert
+    app.include_router(invert.router)
+    logger.warning("Legacy neural inversion route is ENABLED (experimental, unvalidated)")
 
-# Configure Logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("fluxara")
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled error: {exc}", exc_info=True)
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "An internal error occurred in the Fluxara Engine.", "type": type(exc).__name__},
-    )
+    logger.error("Unhandled error: %s", exc, exc_info=True)
+    return JSONResponse(status_code=500, content={"detail": "Internal error."})
 
 
-# ── PDF Auto-Generation: Background Task + Nightly Scheduler ──────────────
+# The database schema is managed by Alembic:  alembic upgrade head
+# The API does not create or alter tables at startup.
 
 async def _run_pdf_generation():
-    """Background task: generate all PDFs from database data."""
     from fluxara.reports.auto_generator import generate_all_reports
     try:
-        logger.info("Starting background PDF generation...")
-        manifest = await generate_all_reports()
-        if manifest:
-            total = (
-                len(manifest.get("facilities", []))
-                + len(manifest.get("regions", []))
-                + len(manifest.get("companies", []))
-                + (1 if manifest.get("global") else 0)
-            )
-            logger.info(f"PDF generation complete: {total} reports ready for instant download")
+        await generate_all_reports()
     except Exception as e:
-        logger.error(f"Background PDF generation failed: {e}", exc_info=True)
+        logger.error("Background PDF generation failed: %s", e, exc_info=True)
 
 
 async def _nightly_scheduler():
-    """Runs at midnight every night to regenerate all PDFs with fresh data."""
-    from datetime import datetime, timedelta
+    from datetime import datetime, timedelta, timezone
     while True:
-        now = datetime.utcnow()
-        # Calculate seconds until next midnight UTC
+        now = datetime.now(timezone.utc)
         tomorrow = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-        wait_seconds = (tomorrow - now).total_seconds()
-        logger.info(f"Nightly PDF scheduler: next run in {wait_seconds/3600:.1f} hours (midnight UTC)")
-        await asyncio.sleep(wait_seconds)
-
-        logger.info("Nightly PDF regeneration starting...")
+        await asyncio.sleep((tomorrow - now).total_seconds())
         await _run_pdf_generation()
 
 
 @app.on_event("startup")
-async def load_model():
-    ckpt_path = "checkpoints/fluxara_best.pt"
-    if os.path.exists(ckpt_path):
-        try:
-            model = FluxaraInversionNet()
-            ckpt = torch.load(ckpt_path, map_location='cpu')
-            model.load_state_dict(ckpt.get("model_state_dict", ckpt))
-            model.eval()
-            invert_module.ENSEMBLE = BayesianEnsemble(model)
-            
-            epoch = ckpt.get("epoch", "Unknown") if isinstance(ckpt, dict) else "Unknown"
-            mae = ckpt.get("val_mae_pct", "Unknown") if isinstance(ckpt, dict) else "Unknown"
-            logger.info(f"Model loaded - epoch {epoch}, MAE {mae}%")
-            invert_module.MODEL = model
-        except Exception as e:
-            logger.error(f"Failed to load model: {e}")
-            logger.warning("Running in mock mode")
-    else:
-        logger.warning("No checkpoint found - running in mock mode")
-
-
-@app.on_event("startup")
-async def startup_create_tables():
-    """Ensure all tables exist (including generated_reports)."""
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        logger.info("Database tables verified")
-    except Exception as e:
-        logger.error(f"DATABASE CONNECTION FAILED: {e}")
-        logger.warning("The API is running in DEGRADED mode (no database). Start Docker and the 'db' container.")
-
-
-@app.on_event("startup")
 async def startup_generate_pdfs():
-    """Generate all PDFs in background on startup (non-blocking)."""
-    # Run PDF generation as a background task so the API starts immediately
-    asyncio.create_task(_run_pdf_generation())
-    # Start the nightly scheduler
-    asyncio.create_task(_nightly_scheduler())
-    logger.info("PDF auto-generation scheduled (background)")
+    # Off by default: the current report templates are built on
+    # facilities.fluxara_latest, which no real pipeline fills yet.
+    if AUTO_PDFS:
+        asyncio.create_task(_run_pdf_generation())
+        asyncio.create_task(_nightly_scheduler())
 
 
 @app.get("/health", tags=["System"])
 async def health(db: AsyncSession = Depends(get_db)):
-    from fluxara.reports.auto_generator import get_manifest
-    manifest = get_manifest()
-    
-    db_ok = False
+    db_ok = postgis = False
+    plumes_count = None
+    last_ingest = None
     try:
-        from sqlalchemy import text
         await db.execute(text("SELECT 1"))
         db_ok = True
+        postgis = (await db.execute(text(
+            "SELECT count(*) FROM pg_extension WHERE extname = 'postgis'"))).scalar() == 1
+        plumes_count = (await db.execute(text("SELECT count(*) FROM plume_detections"))).scalar()
+        last_ingest = (await db.execute(text(
+            "SELECT max(finished_at) FROM ingestion_runs WHERE status = 'success'"))).scalar()
     except Exception as e:
-        logger.error(f"Health check DB failure: {e}")
-
-    pdf_count = 0
-    if manifest:
-        pdf_count = (
-            len(manifest.get("facilities", []))
-            + len(manifest.get("regions", []))
-            + len(manifest.get("companies", []))
-            + (1 if manifest.get("global") else 0)
-        )
+        logger.error("Health check DB failure: %s", e)
     return {
-        "status": "healthy",
-        "version": "1.0.0",
-        "model_loaded": invert_module.ENSEMBLE is not None,
+        "status": "healthy" if (db_ok and postgis) else "degraded",
+        "version": app.version,
         "db_connected": db_ok,
-        "pdfs_ready": pdf_count,
-        "pdfs_generated_at": manifest.get("generated_at") if manifest else None,
+        "postgis": postgis,
+        "plume_detections": plumes_count,
+        "last_successful_ingest": last_ingest.isoformat() if last_ingest else None,
+        "legacy_inversion_enabled": LEGACY_INVERSION,
     }
+
 
 @app.get("/")
 async def root():
-    return {
-        "name": "Fluxara API",
-        "docs": "/docs",
-        "endpoints": ["/facilities", "/alerts", "/reports", "/v1/invert"]
-    }
+    return {"name": "Fluxara API", "docs": "/docs"}

@@ -1,23 +1,27 @@
+# API, database and ingestion. Enough to run the product.
 fastapi
 uvicorn
-scipy
-numpy
-xarray
-netCDF4
-python-multipart
+gunicorn
 pydantic
-pandas
-schedule
-reportlab
-geopandas
-cdsapi
-sqlalchemy
+email-validator
+python-multipart
 python-dotenv
-psycopg2-binary
 pyjwt
 bcrypt
-torch --index-url https://download.pytorch.org/whl/cpu
+
+# Database
+sqlalchemy[asyncio]
 asyncpg
+psycopg2-binary
+alembic
 GeoAlchemy2
-email-validator
-gunicorn
+
+# Ingestion
+requests
+shapely
+schedule
+
+# Reports
+fpdf2
+pandas
+numpy

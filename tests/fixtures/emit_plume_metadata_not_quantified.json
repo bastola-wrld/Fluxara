@@ -1,0 +1,9 @@
+{"_note": "HAND WRITTEN TEST VALUES, not a NASA measurement. See README.md.",
+ "type": "FeatureCollection", "name": "methane_metadata",
+ "features": [{"type": "Feature", "geometry": null,
+  "properties": {"Plume ID": "CH4_PlumeComplex-9999", "UTC Time Observed": "2025-09-22T20:49:33Z",
+   "Max Plume Concentration (ppm m)": 800.0,
+   "Latitude of max concentration": 32.24, "Longitude of max concentration": -102.05,
+   "Wind Speed (m/s)": "NA", "Wind Speed Std (m/s)": "NA", "Wind Speed Source": "NA",
+   "Emissions Rate Estimate (kg/hr)": "NA", "Emissions Rate Estimate Uncertainty (kg/hr)": "NA",
+   "Fetch Length (m)": "NA"}}]}

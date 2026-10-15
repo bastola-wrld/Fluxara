@@ -1,0 +1,272 @@
+{
+ "_note": "Real response from NASA CMR, recorded 2026-10-06. One granule.",
+ "hits": 1686,
+ "items": [
+  {
+   "meta": {
+    "concept-id": "G3961087459-LPCLOUD",
+    "native-id": "EMIT_L2B_CH4PLM_002_20250922T204933_003374",
+    "revision-date": "2026-02-04T17:31:02.516Z"
+   },
+   "umm": {
+    "GranuleUR": "EMIT_L2B_CH4PLM_002_20250922T204933_003374",
+    "TemporalExtent": {
+     "SingleDateTime": "2025-09-22T20:49:33Z"
+    },
+    "SpatialExtent": {
+     "HorizontalSpatialDomain": {
+      "Geometry": {
+       "GPolygons": [
+        {
+         "Boundary": {
+          "Points": [
+           {
+            "Longitude": -102.05006,
+            "Latitude": 32.24679
+           },
+           {
+            "Longitude": -102.05006,
+            "Latitude": 32.24624
+           },
+           {
+            "Longitude": -102.05223,
+            "Latitude": 32.2457
+           },
+           {
+            "Longitude": -102.05223,
+            "Latitude": 32.24516
+           },
+           {
+            "Longitude": -102.05277,
+            "Latitude": 32.24516
+           },
+           {
+            "Longitude": -102.05332,
+            "Latitude": 32.24408
+           },
+           {
+            "Longitude": -102.05386,
+            "Latitude": 32.24408
+           },
+           {
+            "Longitude": -102.05386,
+            "Latitude": 32.24245
+           },
+           {
+            "Longitude": -102.05332,
+            "Latitude": 32.24245
+           },
+           {
+            "Longitude": -102.05332,
+            "Latitude": 32.24082
+           },
+           {
+            "Longitude": -102.05223,
+            "Latitude": 32.24028
+           },
+           {
+            "Longitude": -102.05223,
+            "Latitude": 32.23865
+           },
+           {
+            "Longitude": -102.05169,
+            "Latitude": 32.23865
+           },
+           {
+            "Longitude": -102.05169,
+            "Latitude": 32.23648
+           },
+           {
+            "Longitude": -102.05115,
+            "Latitude": 32.23648
+           },
+           {
+            "Longitude": -102.05061,
+            "Latitude": 32.2354
+           },
+           {
+            "Longitude": -102.04898,
+            "Latitude": 32.2354
+           },
+           {
+            "Longitude": -102.04898,
+            "Latitude": 32.23594
+           },
+           {
+            "Longitude": -102.04681,
+            "Latitude": 32.23648
+           },
+           {
+            "Longitude": -102.04681,
+            "Latitude": 32.23703
+           },
+           {
+            "Longitude": -102.04518,
+            "Latitude": 32.23703
+           },
+           {
+            "Longitude": -102.04464,
+            "Latitude": 32.23811
+           },
+           {
+            "Longitude": -102.0441,
+            "Latitude": 32.23811
+           },
+           {
+            "Longitude": -102.04356,
+            "Latitude": 32.24028
+           },
+           {
+            "Longitude": -102.04301,
+            "Latitude": 32.24028
+           },
+           {
+            "Longitude": -102.04301,
+            "Latitude": 32.24191
+           },
+           {
+            "Longitude": -102.04247,
+            "Latitude": 32.24191
+           },
+           {
+            "Longitude": -102.04247,
+            "Latitude": 32.24299
+           },
+           {
+            "Longitude": -102.04193,
+            "Latitude": 32.24299
+           },
+           {
+            "Longitude": -102.04193,
+            "Latitude": 32.24516
+           },
+           {
+            "Longitude": -102.04247,
+            "Latitude": 32.24516
+           },
+           {
+            "Longitude": -102.04301,
+            "Latitude": 32.24624
+           },
+           {
+            "Longitude": -102.04464,
+            "Latitude": 32.24624
+           },
+           {
+            "Longitude": -102.04464,
+            "Latitude": 32.24679
+           },
+           {
+            "Longitude": -102.05006,
+            "Latitude": 32.24679
+           }
+          ]
+         }
+        }
+       ]
+      }
+     }
+    },
+    "RelatedUrls": [
+     {
+      "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLM_002_20250922T204933_003374.tif",
+      "Type": "GET DATA"
+     },
+     {
+      "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLMMETA_002_20250922T204933_003374.json",
+      "Type": "GET DATA"
+     },
+     {
+      "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLM_002_20250922T204933_003374.png",
+      "Type": "GET RELATED VISUALIZATION"
+     },
+     {
+      "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLM_002_20250922T204933_003374.cmr.json",
+      "Type": "EXTENDED METADATA"
+     },
+     {
+      "URL": "s3://lp-prod-protected/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLM_002_20250922T204933_003374.tif",
+      "Type": "GET DATA VIA DIRECT ACCESS"
+     },
+     {
+      "URL": "s3://lp-prod-protected/EMITL2BCH4PLM.002/EMIT_L2B_CH4PLM_002_20250922T204933_003374/EMIT_L2B_CH4PLMMETA_002_20250922T204933_003374.json",
+      "Type": "GET DATA VIA DIRECT ACCESS"
+     },
+     {
+      "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/s3credentials",
+      "Type": "VIEW RELATED INFORMATION"
+     }
+    ],
+    "AdditionalAttributes": [
+     {
+      "Name": "EMIT_SDS_SOFTWARE_BUILD_VERSION",
+      "Values": [
+       "010629"
+      ]
+     },
+     {
+      "Name": "EMIT_GHG_SOFTWARE_BUILD_VERSION",
+      "Values": [
+       "v0.1.2"
+      ]
+     },
+     {
+      "Name": "EMIT_GHG_SOFTWARE_DELIVERY_VERSION",
+      "Values": [
+       "v0.1.2"
+      ]
+     },
+     {
+      "Name": "Identifier_product_doi_authority",
+      "Values": [
+       "https://doi.org"
+      ]
+     },
+     {
+      "Name": "Identifier_product_doi",
+      "Values": [
+       "10.5067/EMIT/EMITL2BCH4PLM.002"
+      ]
+     },
+     {
+      "Name": "SOURCE_SCENES",
+      "Values": [
+       "['EMIT_L2B_CH4ENH_V002_20250922T204933_2526514_006']"
+      ]
+     },
+     {
+      "Name": "PLUME_ID",
+      "Values": [
+       "3374"
+      ]
+     },
+     {
+      "Name": "ORBIT",
+      "Values": [
+       "2526514"
+      ]
+     },
+     {
+      "Name": "ORBIT_SEGMENT",
+      "Values": [
+       "0"
+      ]
+     },
+     {
+      "Name": "SOLAR_ZENITH",
+      "Values": [
+       "44.26"
+      ]
+     },
+     {
+      "Name": "SOLAR_AZIMUTH",
+      "Values": [
+       "229.93"
+      ]
+     }
+    ],
+    "CloudCover": 9
+   }
+  }
+ ]
+}

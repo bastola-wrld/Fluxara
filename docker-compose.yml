@@ -1,65 +1,59 @@
+# Local development. Copy .env.example to .env first.
 services:
   db:
-    image: postgis/postgis:15-3.3
-    container_name: fluxara-db-1
+    image: postgis/postgis:16-3.4
     environment:
-      - POSTGRES_USER=fluxara
-      - POSTGRES_PASSWORD=fluxara123
-      - POSTGRES_DB=fluxara
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
 
   api:
     build: .
-    container_name: fluxara-api-1
-    depends_on:
-      - db
+    env_file: .env
     environment:
-      - DATABASE_URL=postgresql://fluxara:fluxara123@db:5432/fluxara
-      - PYTHONPATH=/app
-      - FLUXARA_ENV=production
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
-    volumes:
-      - ./satellite_data:/app/satellite_data
-      - ./checkpoints:/app/checkpoints
-      - ./research:/app/research
-      - ./fluxara:/app/fluxara
-      - ./database:/app/database
-      - ./requirements_api.txt:/app/requirements_api.txt
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-    restart: always
+    restart: unless-stopped
+
+  fetcher:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      api:
+        condition: service_healthy     # api has applied the migrations by then
+    command: python -m fluxara.data.daily_fetch
+    restart: unless-stopped
 
   frontend:
     image: node:20-alpine
-    container_name: fluxara-frontend-1
     working_dir: /app
     volumes:
       - ./client:/app
     ports:
       - "3000:3000"
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 3000"
-    restart: always
-
-  fetcher:
-    build: .
-    container_name: fluxara-fetcher-1
-    depends_on:
-      - api
-    environment:
-      - DATABASE_URL=postgresql://fluxara:fluxara123@db:5432/fluxara
-    volumes:
-      - ./satellite_data:/app/satellite_data
-      - ./fluxara:/app/fluxara
-    command: python fluxara/data/daily_fetch.py
-    restart: always
+    restart: unless-stopped
 
 volumes:
   postgres_data:

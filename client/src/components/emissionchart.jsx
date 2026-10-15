@@ -3,12 +3,30 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { theme } from '../design_system'
 
 export default function EmissionChart({ data }) {
-    // Standardize data format
-    const chartData = data.dates.map((d, i) => ({
+    const dates = data?.dates || []
+    const chartData = dates.map((d, i) => ({
         date: d,
-        EPA: data.epa[i],
-        Fluxara: data.fluxara[i]
+        Reported: data.epa?.[i] ?? null,
+        Observed: data.fluxara?.[i] ?? null
     }))
+
+    // No satellite detections yet: say so. Never draw a made up line.
+    if (chartData.length === 0) {
+        return (
+            <div style={{
+                background: theme.colors.surface,
+                borderRadius: theme.radius.md,
+                border: `1px solid ${theme.colors.border}`,
+                padding: '2rem',
+                fontFamily: 'serif',
+                color: theme.colors.textMuted,
+                fontSize: '0.85rem'
+            }}>
+                No satellite plume detections in this area yet. This does not mean zero emissions:
+                satellites only see large leaks, and only on clear days when they pass over.
+            </div>
+        )
+    }
 
     return (
         <div style={{
@@ -28,10 +46,10 @@ export default function EmissionChart({ data }) {
                 alignItems: 'center'
             }}>
                 <span style={{ fontSize: '0.6rem', fontWeight: 'bold', color: theme.colors.primary, textTransform: 'uppercase', letterSpacing: '0.2em' }}>
-                    📈 Emission Attribution Trends
+                    Observed plume rates by month
                 </span>
                 <span style={{ fontSize: '0.6rem', color: '#9ca3af', fontWeight: 'medium', fontStyle: 'italic' }}>
-                    Values in kg/hr
+                    kg/hr at overpass. Months without detections are not shown.
                 </span>
             </div>
             <div style={{ padding: '1.5rem' }}>
@@ -73,8 +91,8 @@ export default function EmissionChart({ data }) {
                             wrapperStyle={{ fontSize: '10px', paddingBottom: '20px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.1em' }} 
                         />
                         <Area 
-                            type="monotone" 
-                            dataKey="Fluxara" 
+                            type="linear" 
+                            dataKey="Observed" 
                             stroke={theme.colors.primary} 
                             strokeWidth={2} 
                             fillOpacity={1} 
@@ -82,7 +100,7 @@ export default function EmissionChart({ data }) {
                         />
                         <Line 
                             type="monotone" 
-                            dataKey="EPA" 
+                            dataKey="Reported" 
                             stroke={theme.colors.accent} 
                             strokeWidth={2} 
                             strokeDasharray="5 5" 

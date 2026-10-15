@@ -154,7 +154,7 @@ export default function FacilityDetail() {
                 </div>
                 <div style={{ ...cardStyle, background: theme.colors.primary, color: 'white' }}>
                     <span style={{ ...labelStyle, color: theme.colors.accent }}>Fluxara Latest</span>
-                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{facility.fluxara_latest || '0'} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', opacity: 0.6 }}>kg/hr</span></p>
+                    <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>{facility.fluxara_latest ?? 'No data'} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', opacity: 0.6 }}>kg/hr</span></p>
                     <p style={{ fontSize: '0.75rem', color: theme.colors.accent, marginTop: '0.5rem', margin: 0 }}>Calculated via TROPOMI {new Date().toLocaleDateString()}</p>
                 </div>
                 <div style={cardStyle}>

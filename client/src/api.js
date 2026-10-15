@@ -6,9 +6,6 @@ const getHeaders = () => {
     const h = { 'Content-Type': 'application/json' };
     if (token) {
         h['Authorization'] = `Bearer ${token}`;
-    } else {
-        // Fallback for dev key if no token exists
-        h['X-API-Key'] = 'fluxara-dev-key-2024';
     }
     return h;
 };

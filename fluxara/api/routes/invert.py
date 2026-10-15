@@ -1,7 +1,12 @@
 """
 fluxara/api/routes/invert.py
-Real inference route — no silent mock fallbacks on data failure.
-Mock mode only activates when checkpoint is genuinely missing.
+
+LEGACY, EXPERIMENTAL. Not part of the product.
+
+The U-Net behind this route was trained on synthetic data and has not been
+validated against real emissions. The route is only mounted when
+FLUXARA_ENABLE_LEGACY_INVERSION=true, and it returns 503 when no trained
+model is present. It never returns placeholder numbers.
 """
 
 import time
@@ -38,7 +43,7 @@ CKPT_BEST = "checkpoints/fluxara_best.pt"
 def _load_model():
     """Load model from checkpoint. Returns (model, ensemble) or (None, None)."""
     if not os.path.exists(CKPT_BEST):
-        log.warning("No checkpoint at %s — mock mode active", CKPT_BEST)
+        log.warning("No checkpoint at %s: legacy inversion unavailable", CKPT_BEST)
         return None, None
     try:
         ckpt = torch.load(CKPT_BEST, map_location="cpu")
@@ -75,16 +80,12 @@ async def invert(
         req.longitude + req.bbox_deg / 2,
     ]
 
-    # ── Mock mode (no checkpoint) ─────────────────────────────────────────────
+    # ── No trained model: refuse, never invent a number ──────────────────────
     if ENSEMBLE is None:
-        compute_ms = int((time.perf_counter() - start) * 1000)
-        log.warning("Returning mock response — train the model first")
-        return InversionResponse(
-            top_facility       = "Mock Facility (Model not loaded — see /health)",
-            emission_rate_kg_hr= 847.3,
-            uncertainty_1sigma = 211.8,
-            confidence         = 0.0,        # zero confidence signals mock
-            compute_time_ms    = compute_ms,
+        raise HTTPException(
+            status_code=503,
+            detail="The legacy neural inversion has no trained model and is disabled. "
+                   "Use /v1/plumes for satellite observations.",
         )
 
     # ── Download satellite data ───────────────────────────────────────────────

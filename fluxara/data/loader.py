@@ -8,8 +8,8 @@ def load_tropomi(file_path, bbox):
     """
     Load TROPOMI NetCDF, quality filter, and regrid to 64x64.
     """
-    if not os.path.exists(file_path) or "mock" in file_path:
-        return np.random.uniform(1800, 2000, (64, 64)).astype(np.float32)
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"TROPOMI file not found: {file_path}")
 
     ds = xr.open_dataset(file_path)
     # QA Filter (typically qa_value >= 0.5 is acceptable for CH4)
@@ -29,8 +29,8 @@ def load_era5(file_path, bbox):
     """
     Load ERA5 NetCDF, extract u/v wind at 6 levels, and stack.
     """
-    if not os.path.exists(file_path) or "mock" in file_path:
-        return np.random.normal(5, 2, (6, 64, 64)).astype(np.float32)
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"ERA5 file not found: {file_path}")
 
     ds = xr.open_dataset(file_path)
     

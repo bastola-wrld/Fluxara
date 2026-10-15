@@ -1,36 +1,40 @@
-import asyncio
-import sys
+#!/usr/bin/env python3
+"""
+Create or update the first admin user.
+
+    FLUXARA_ADMIN_EMAIL=you@example.com FLUXARA_ADMIN_PASSWORD='a long passphrase' \\
+        python scripts/seed_admin.py
+
+There is no default password. The password must be at least 12 characters.
+"""
 import os
+import sys
 
-# Add project root to path
-sys.path.append(os.getcwd())
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sqlalchemy.future import select
-from fluxara.database.connection import AsyncSessionLocal
-from fluxara.database.models import User
-from fluxara.api.auth import get_password_hash
+from fluxara.api.auth import get_password_hash        # noqa: E402
+from fluxara.database.models import User              # noqa: E402
+from fluxara.database.sync import session_scope       # noqa: E402
 
-async def seed():
-    async with AsyncSessionLocal() as db:
-        # Check if admin exists
-        result = await db.execute(select(User).where(User.email == "admin@fluxara.io"))
-        user = result.scalar_one_or_none()
-        
+
+def main():
+    email = os.getenv("FLUXARA_ADMIN_EMAIL")
+    password = os.getenv("FLUXARA_ADMIN_PASSWORD")
+    if not email or not password:
+        sys.exit("Set FLUXARA_ADMIN_EMAIL and FLUXARA_ADMIN_PASSWORD.")
+    if len(password) < 12:
+        sys.exit("FLUXARA_ADMIN_PASSWORD must be at least 12 characters.")
+    with session_scope() as db:
+        user = db.query(User).filter(User.email == email).one_or_none()
         if user:
-            user.hashed_password = get_password_hash("fluxaraadmin123")
-            print("Updated existing admin password for admin@fluxara.io")
+            user.hashed_password = get_password_hash(password)
+            user.role, user.active = "admin", True
+            print(f"Updated admin {email}")
         else:
-            user = User(
-                email="admin@fluxara.io",
-                hashed_password=get_password_hash("fluxaraadmin123"),
-                role="admin",
-                company="Fluxara",
-                active=True
-            )
-            db.add(user)
-            print("Created new admin user admin@fluxara.io")
-            
-        await db.commit()
+            db.add(User(email=email, hashed_password=get_password_hash(password),
+                        role="admin", company="Fluxara", active=True))
+            print(f"Created admin {email}")
+
 
 if __name__ == "__main__":
-    asyncio.run(seed())
+    main()

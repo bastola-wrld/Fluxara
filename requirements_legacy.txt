@@ -1,0 +1,9 @@
+# Only for the experimental neural inversion in fluxara/models and legacy/.
+# Not needed to run the product.
+torch
+scipy
+xarray
+netCDF4
+cdsapi
+geopandas
+tqdm

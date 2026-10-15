@@ -123,3 +123,7 @@ satellite_data/test_normalization_stats.json
 # Logs
 backend.log
 *.log
+
+# Local
+.venv/
+client/dist/

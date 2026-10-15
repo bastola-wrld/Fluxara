@@ -1,113 +1,101 @@
 # Fluxara
 
-> **Deep-learning based atmospheric inversion system for real-time methane emission attribution**
+Methane observations from open satellite data, with the source, licence and
+uncertainty attached to every number.
 
-Fluxara is a high-performance system designed to attribute greenhouse gas (methane) emission rates to specific industrial facilities using satellite data (TROPOMI) and meteorological wind fields (ERA5). By replacing traditional, computationally expensive Lagrangian particle dispersion models (like STILT) with a high-speed U-Net / Fourier Neural Operator (FNO) inversion engine, Fluxara can perform source attribution and quantification in milliseconds instead of hours.
+## Status
 
-## 🚀 Key Features
+Early prototype. What works today:
 
-- **Neural Inversion Engine**: Uses a physics-constrained U-Net architecture (`FluxaraInversionNet`) to rapidly map 3D wind fields and atmospheric states to ground footprints, ensuring mass conservation.
-- **Bayesian Uncertainty**: Employs Monte Carlo dropout-based Bayesian Ensembles to provide defensible confidence scores and 1-sigma uncertainties for every emission prediction.
-- **Automated Data Pipeline**: Integrates directly with the Copernicus Data Space (CDS) API to fetch and process daily Sentinel-5P TROPOMI and ERA5 NetCDF files.
-- **Mass Balance Attribution**: Computes highly accurate emission rates (kg/hr) using Gaussian plume mass balance approximations conforming to IPCC Tier 2 standards.
-- **Real-Time API & Dashboard**: Features an async FastAPI backend and a responsive React frontend dashboard to monitor facilities, visualize plumes, and manage alerts.
+* Ingestion of real NASA EMIT methane plumes and a Sentinel 2 scene catalogue
+  into PostGIS, with full provenance. Jobs are safe to rerun.
+* An API to query plumes near a site, and an honest monthly time series.
+* Login, roles, and the dashboard shell.
 
-## 📂 Project Structure
+What does not exist yet:
 
-- `fluxara/` — Core Python package
-  - `api/` — FastAPI application, routes, and Pydantic schemas.
-  - `models/` — PyTorch neural network, Bayesian ensemble, and physics-based attributor.
-  - `data/` — Satellite data downloaders, loaders, and preprocessors.
-  - `database/` — SQLAlchemy async ORM models, CRUD, and connection logic.
-  - `training/` — Model training loops and dataset definitions.
-- `client/` — React frontend application built with Vite, Recharts, and Leaflet.
-- `scripts/` — Utilities for benchmarking, database initialization, and data generation.
-- `tests/` — Comprehensive test suites for models, data pipelines, and production APIs.
-- `satellite_data/` — Cached TROPOMI/ERA5 data and normalisation statistics.
-- `checkpoints/` — Pre-trained model weights.
+* Our own Sentinel 2 methane retrieval (next step).
+* PDF reports on real data. The old templates are switched off.
+* Any validated accuracy figure. Do not quote one.
 
-## 🛠️ Installation & Setup
+The neural "inversion" model in `fluxara/models` is experimental research
+code trained on synthetic data. It is off by default and is not the product.
 
-### Prerequisites
+## Quick start
 
-- Python 3.11+
-- Node.js 20+
-- PostgreSQL 15+ (Local or Docker)
-- CDS API Account (for downloading satellite data)
-
-### 1. Backend Setup
+Needs Docker, or Python 3.11 plus Postgres 15+ with PostGIS.
 
 ```bash
-# Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-pip install -r requirements_api.txt
-
-# Configure environment variables
-cp .env.example .env
-# Ensure your DATABASE_URL and FLUXARA_DEV_KEY are set correctly
-
-# Configure Copernicus CDS API credentials
-# Ensure ~/.cdsapirc is properly configured with your API key
+cp .env.example .env          # then fill in FLUXARA_SECRET_KEY and the passwords
+docker compose up --build -d  # db, api (runs migrations), fetcher, frontend
+docker compose exec api python scripts/seed_facilities.py
+docker compose exec api python scripts/seed_admin.py
 ```
 
-### 2. Database Initialization
+API docs: http://localhost:8000/docs. Dashboard: http://localhost:3000.
 
-Fluxara uses an async SQLAlchemy setup. Initialize the database and seed it with Permian Basin facilities:
+Without Docker:
 
 ```bash
-python scripts/init_db_async.py
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements_dev.txt
+alembic upgrade head
+python scripts/seed_facilities.py
+python scripts/seed_admin.py
+uvicorn fluxara.api.main:app --reload
 ```
 
-### 3. Frontend Setup
+## Getting real data in
 
 ```bash
-cd client
-npm install
+python -m fluxara.ingest.run emit --days 60            # NASA EMIT plumes, no login needed
+python -m fluxara.ingest.run emit-enrich               # emission rates, needs EARTHDATA_TOKEN
+python -m fluxara.ingest.run sentinel2 --days 10       # scenes over your facilities
+python -m fluxara.ingest.run daily                     # all of the above, for a scheduler
 ```
 
-## 🚦 Running the Application
+`EARTHDATA_TOKEN` is free: create an account at https://urs.earthdata.nasa.gov
+and choose Generate Token.
 
-### Start the API Server
+Each run is recorded in `ingestion_runs` with its parameters, row counts, code
+version and any error.
+
+## Database changes
+
+The schema is managed by Alembic. The API never creates tables itself.
 
 ```bash
-uvicorn fluxara.api.main:app --reload --host 0.0.0.0 --port 8000
+alembic upgrade head                           # apply
+alembic revision --autogenerate -m "message"   # after editing models.py
 ```
-The API documentation will be available at `http://localhost:8000/docs`.
 
-### Start the React Dashboard
+If you have an old database made before migrations existed:
+`alembic stamp 0001 && alembic upgrade head`.
 
-In a new terminal:
-```bash
-cd client
-npm run dev
-```
-The dashboard will be available at `http://localhost:3000` (or `5173` depending on Vite configuration).
-
-### Docker Deployment
-
-Alternatively, you can run the entire stack using Docker Compose:
+## Tests
 
 ```bash
-docker compose up --build -d
+TEST_DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5433/fluxara_test pytest
 ```
 
-## 🧪 Testing
+The tests need a real Postgres with PostGIS and rebuild that database, so its
+name must contain `test`.
 
-Run the full, unified test suite covering the data pipeline, AI model, Bayesian ensemble, attribution physics, and API routes:
+## Layout
 
-```bash
-pytest tests/test_suite_full.py -v
-```
+| Path | What |
+|---|---|
+| `fluxara/ingest/` | One module per data source, plus `run.py` |
+| `fluxara/database/` | Models, async engine (API), sync engine (jobs) |
+| `fluxara/api/` | FastAPI app and routes |
+| `migrations/` | Alembic migrations |
+| `client/` | React dashboard |
+| `scripts/` | Seeding and the daily job |
+| `tests/` | Test suite and recorded API responses |
+| `legacy/`, `docs/archive/` | Old research code and documents. Read their README first. |
 
-## 📝 Configuration
+See `HOW_IT_WORKS.md` for a plain walkthrough of the code, and `DATA_SOURCES.md` for licences and for what each satellite can and cannot see.
 
-- **Mock Mode**: If a pre-trained model checkpoint (`fluxara_best.pt`) isn't found in `checkpoints/`, the API will automatically fall back to mock mode.
-- **PostGIS**: By default, spatial operations use basic lat/lon columns. You can enable PostGIS by setting `USE_POSTGIS=true` in your `.env`.
+## Licence
 
-## 📜 License
-
-Copyright © 2026 Fluxara Technologies Inc. All rights reserved.
+Proprietary. See `LICENSE`.
