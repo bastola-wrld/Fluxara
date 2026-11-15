@@ -57,7 +57,7 @@ def db(schema):
     from sqlalchemy import text
     from fluxara.database.sync import session_scope
     with session_scope() as s:
-        s.execute(text("TRUNCATE plume_detections, satellite_scenes, ingestion_runs, "
+        s.execute(text("TRUNCATE site_observations, plume_detections, satellite_scenes, ingestion_runs, "
                        "alerts, inversions, reports, generated_reports, facilities, "
                        "users, organisations RESTART IDENTITY CASCADE"))
     with session_scope() as s:

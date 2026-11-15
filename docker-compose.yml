@@ -27,6 +27,8 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
+    volumes:
+      - ./satellite_data/cache:/app/satellite_data/cache   # downloaded images survive a rebuild
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s

@@ -8,7 +8,8 @@ def test_schema_has_postgis_tables_and_gist_indexes():
     eng = get_engine()
     insp = inspect(eng)
     tables = set(insp.get_table_names())
-    assert {"facilities", "plume_detections", "satellite_scenes", "ingestion_runs"} <= tables
+    assert {"facilities", "plume_detections", "satellite_scenes", "ingestion_runs",
+            "site_observations"} <= tables
     with eng.connect() as c:
         assert c.execute(text("SELECT count(*) FROM pg_extension WHERE extname='postgis'")).scalar() == 1
         gist = {r[0] for r in c.execute(text(
@@ -43,4 +44,19 @@ def test_impossible_coordinates_are_rejected(db):
     from sqlalchemy.exc import IntegrityError
     with pytest.raises(IntegrityError):
         db.execute(text("INSERT INTO facilities (name, lat, lon) VALUES ('bad', 131.0, 6.0)"))
+    db.rollback()
+
+
+def test_observation_status_must_be_a_known_word(db):
+    import pytest
+    from sqlalchemy.exc import IntegrityError
+    db.execute(text("INSERT INTO facilities (name, lat, lon) VALUES ('A', 31.67, 6.07)"))
+    db.execute(text("""INSERT INTO satellite_scenes (source, source_id, acquired_at, footprint,
+                                                     licence, attribution)
+                       VALUES ('s', 'x', now(), ST_GeomFromText('POINT(6 31)', 4326), 'l', 'a')"""))
+    with pytest.raises(IntegrityError):
+        db.execute(text("""INSERT INTO site_observations
+                               (facility_id, scene_id, method, method_version, status, observed_at)
+                           SELECT f.id, s.id, 'm', '1', 'maybe', now()
+                           FROM facilities f, satellite_scenes s"""))
     db.rollback()

@@ -127,3 +127,7 @@ backend.log
 # Local
 .venv/
 client/dist/
+
+# Downloaded satellite images and wind files
+satellite_data/cache/
+validation_s2_vs_emit.csv

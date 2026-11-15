@@ -60,6 +60,16 @@ and choose Generate Token.
 Each run is recorded in `ingestion_runs` with its parameters, row counts, code
 version and any error.
 
+## Checking a site for methane
+
+```bash
+docker compose exec api python -m fluxara.retrieval.run --facility-id 1 --days 60
+docker compose exec api python -m fluxara.retrieval.show --facility-id 1
+```
+
+This needs the Copernicus logins in `.env`. See `CHANGES_WEEK2.md` for what the
+method does, what it cannot do, and how to compare it with NASA.
+
 ## Database changes
 
 The schema is managed by Alembic. The API never creates tables itself.
@@ -86,6 +96,7 @@ name must contain `test`.
 | Path | What |
 |---|---|
 | `fluxara/ingest/` | One module per data source, plus `run.py` |
+| `fluxara/retrieval/` | Our own methane measurement from Sentinel 2 images |
 | `fluxara/database/` | Models, async engine (API), sync engine (jobs) |
 | `fluxara/api/` | FastAPI app and routes |
 | `migrations/` | Alembic migrations |

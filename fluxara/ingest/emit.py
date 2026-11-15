@@ -349,6 +349,8 @@ def enrich(session, http=None, token=None, limit=500):
     with ingestion_run(session, SOURCE, {"pass": "enrich", "candidates": len(plumes)}) as run:
         for plume in plumes:
             run.n_fetched += 1
+            if run.n_fetched % 25 == 0:
+                log.info("Enriching plume %s of %s", run.n_fetched, len(plumes))
 
             response = http.get(plume.source_url, headers=login, timeout=HTTP_TIMEOUT)
             if response.status_code in (401, 403):
@@ -378,6 +380,7 @@ def enrich(session, http=None, token=None, limit=500):
             plume.ingestion_run_id = run.id
             plume.updated_at = now_utc()
             enriched += 1
+            run.n_updated = enriched
 
         run.n_updated = enriched
         if plumes and failed == len(plumes):

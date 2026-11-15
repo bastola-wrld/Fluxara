@@ -245,6 +245,10 @@ class SatelliteScene(Base):
     acquired_at = Column(DateTime(timezone=True), nullable=False, index=True)
     cloud_cover_pct = Column(Float)
     tile_id     = Column(String(20), index=True)
+    # Needed to turn a band ratio into a methane amount (see retrieval/varon.py).
+    relative_orbit     = Column(Integer)   # same orbit = same viewing direction
+    sun_elevation_deg  = Column(Float)     # height of the sun above the horizon
+    view_incidence_deg = Column(Float)     # how far off straight down the satellite looked
     footprint   = Column(Geometry("GEOMETRY", srid=SRID, spatial_index=False), nullable=False)
     assets      = Column(JSONB, nullable=False, default=dict)   # band -> {href, https, scale, offset, gsd_m}
     licence     = Column(String(100), nullable=False)
@@ -256,4 +260,46 @@ class SatelliteScene(Base):
     __table_args__ = (
         UniqueConstraint("source", "source_id", name="uq_scene_source_id"),
         Index("ix_satellite_scenes_footprint", "footprint", postgresql_using="gist"),
+    )
+
+
+class SiteObservation(Base):
+    """
+    One check of one facility in one Sentinel 2 image.
+
+    Every check is saved, also the ones that found nothing, because "we looked
+    on 12 clear days and saw no plume above 3 t/h" is a result a customer pays
+    for. status is one of:
+
+        plume_detected   a plume was found, plume_detection_id points to it
+        no_plume         the image was good and nothing was above detection_limit_kg_hr
+        unusable         the image could not be used, reason says why
+    """
+    __tablename__ = "site_observations"
+    id          = Column(BigInteger, primary_key=True)
+    facility_id = Column(Integer, ForeignKey("facilities.id", ondelete="CASCADE"), nullable=False, index=True)
+    scene_id    = Column(BigInteger, ForeignKey("satellite_scenes.id", ondelete="CASCADE"), nullable=False)
+    reference_scene_id = Column(BigInteger, ForeignKey("satellite_scenes.id", ondelete="SET NULL"))
+    method         = Column(String(50), nullable=False)
+    method_version = Column(String(20), nullable=False)
+    status      = Column(String(20), nullable=False)
+    reason      = Column(Text)
+    observed_at = Column(DateTime(timezone=True), nullable=False, index=True)
+
+    usable_fraction      = Column(Float)   # share of the crop that was not cloud, water or shadow
+    noise_mol_m2         = Column(Float)   # how bumpy the methane map is away from the site
+    detection_limit_kg_hr = Column(Float)  # smallest leak this image could have shown
+    wind_speed_10m_ms    = Column(Float)
+    wind_from_deg        = Column(Float)   # direction the wind comes from, 0 = north
+    wind_source          = Column(String(50))
+
+    plume_detection_id  = Column(BigInteger, ForeignKey("plume_detections.id", ondelete="SET NULL"))
+    distance_to_plume_m = Column(Float)
+    wind_agreement      = Column(String(20))   # consistent | unclear | inconsistent
+
+    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("facility_id", "scene_id", "method", name="uq_site_observation"),
     )

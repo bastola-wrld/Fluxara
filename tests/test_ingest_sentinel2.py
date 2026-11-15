@@ -26,6 +26,16 @@ def test_parse_real_stac_item():
     assert b12["href"].startswith("s3://eodata/") and b12["https"].startswith("https://download.dataspace")
     assert (b12["scale"], b12["offset"], b12["gsd_m"]) == (0.0001, -0.1, 20)
     assert row["attribution"] == "Contains modified Copernicus Sentinel data 2026"
+    assert row["relative_orbit"] == 65
+    # This recorded answer has no sun angle. Empty, never a made up number.
+    assert row["sun_elevation_deg"] is None and row["view_incidence_deg"] is None
+
+
+def test_scene_angles_are_read_when_the_catalogue_gives_them():
+    item = load_fixture("sentinel2_stac_search.json")["features"][0]
+    item["properties"].update({"view:sun_elevation": 55.2, "view:incidence_angle": 7.5})
+    row = sentinel2.parse_item(item)
+    assert (row["sun_elevation_deg"], row["view_incidence_deg"]) == (55.2, 7.5)
 
 
 def test_bbox_around_is_wider_in_longitude_away_from_equator():

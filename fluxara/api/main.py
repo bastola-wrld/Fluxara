@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fluxara.api.routes import facilities, alerts, reports, timeseries, plumes
+from fluxara.api.routes import facilities, alerts, reports, timeseries, plumes, observations
 from fluxara.api.routes import admin, company, government, auth
 from fluxara.database.connection import get_db
 
@@ -42,6 +42,7 @@ app.include_router(alerts.router, prefix="/v1")
 app.include_router(reports.router, prefix="/v1")
 app.include_router(timeseries.router, prefix="/v1")
 app.include_router(plumes.router, prefix="/v1")
+app.include_router(observations.router, prefix="/v1")
 app.include_router(admin.router)
 app.include_router(company.router)
 app.include_router(government.router)

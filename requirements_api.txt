@@ -21,6 +21,13 @@ requests
 shapely
 schedule
 
+# Sentinel 2 methane retrieval
+rasterio
+scipy
+cdsapi>=0.7.7
+xarray
+netCDF4
+
 # Reports
 fpdf2
 pandas

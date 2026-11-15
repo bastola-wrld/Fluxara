@@ -91,6 +91,21 @@ panels) is your original code.
 generation. Both printed numbers that were not observed. Switches for them are
 in `.env`.
 
+## 3b. Retrieval: `fluxara/retrieval/`
+
+This is where Fluxara makes its own measurement from Sentinel 2 images.
+
+| File | What it does |
+|---|---|
+| `varon.py` | The maths: two images in, a methane map and a leak rate out |
+| `bands.py` | Downloads the image bands and cuts out the square around a site |
+| `wind.py` | The wind at the site when the satellite passed (ERA5) |
+| `pipeline.py` | Runs a check for a facility and saves the result |
+| `run.py`, `show.py` | Start a run and read the results from the terminal |
+
+Read the top of `varon.py` first. It explains the method in plain words and
+has a worked example. `CHANGES_WEEK2.md` lists what the method cannot do.
+
 ## 4. Settings: `.env`
 
 | Setting | Why |
@@ -102,9 +117,10 @@ in `.env`.
 
 ## 5. Tests: `tests/`
 
-`pytest` runs 35 tests against a real Postgres with PostGIS. The files in
+`pytest` runs 72 tests against a real Postgres with PostGIS. The files in
 `tests/fixtures/` are real answers recorded from NASA and Copernicus, so the
-tests check our code against what those services actually send.
+tests check our code against what those services actually send. The retrieval
+tests use made up images with a known plume, so the right answer is known.
 
 ## Common commands
 
@@ -115,6 +131,8 @@ python scripts/seed_admin.py                      # create your admin login
 python -m fluxara.ingest.run emit --days 365      # fetch EMIT plumes
 python -m fluxara.ingest.run emit-enrich          # fetch their emission rates
 python -m fluxara.ingest.run sentinel2 --days 10  # list Sentinel 2 images
+python -m fluxara.retrieval.run --facility-id 1   # check a site for methane
+python -m fluxara.retrieval.show --facility-id 1  # read what the checks found
 uvicorn fluxara.api.main:app --reload             # start the API
 pytest                                            # run the tests
 ```

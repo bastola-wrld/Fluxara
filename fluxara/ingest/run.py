@@ -82,6 +82,14 @@ def main(argv=None):
     if args.command == "daily":
         return 1 if run_daily() else 0
 
+    try:
+        return run_command(parser, args)
+    except KeyboardInterrupt:
+        print("Stopped. Work finished so far was kept. Run the same command again to continue.")
+        return 130
+
+
+def run_command(parser, args):
     with session_scope() as session:
         if args.command == "emit":
             if not args.days and not args.updated_days:

@@ -68,6 +68,7 @@ def ingestion_run(session, source, params):
             ... fetch and save data, update run.n_fetched etc ...
 
     If the block finishes, the run is marked "success".
+    If you press Ctrl+C, the work done so far is kept and the run is marked "stopped".
     If anything fails, everything the block wrote is undone, the run is marked
     "failed" with the error message, and the error is raised again so you see it.
     """
@@ -83,6 +84,14 @@ def ingestion_run(session, source, params):
 
     try:
         yield run
+    except KeyboardInterrupt:
+        # Ctrl+C. Keep what was finished so far and say the run was stopped.
+        run.status = "stopped"
+        run.finished_at = now_utc()
+        session.commit()
+        log.warning("%s run %s stopped by you. Finished work was kept: fetched=%s",
+                    source, run_id, run.n_fetched)
+        raise
     except Exception as error:
         session.rollback()  # throw away the half finished work
         failed_run = session.get(IngestionRun, run_id)

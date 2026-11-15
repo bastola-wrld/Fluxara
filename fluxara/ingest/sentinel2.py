@@ -36,6 +36,7 @@ MAX_PAGES = 50  # safety stop so a search can never run forever
 
 # On a scene we already have, the search may refresh all of these.
 SCENE_COLUMNS = ["platform", "acquired_at", "cloud_cover_pct", "tile_id",
+                 "relative_orbit", "sun_elevation_deg", "view_incidence_deg",
                  "footprint", "assets", "licence", "attribution", "ingestion_run_id"]
 
 KM_PER_DEGREE = 111.32  # length of one degree of latitude, roughly
@@ -78,6 +79,14 @@ def read_band_links(item):
     return bands
 
 
+def to_float(value):
+    """A number, or None when the catalogue left the field out."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def parse_item(item):
     """Turn one search result into a row for satellite_scenes, or None if unusable."""
     props = item.get("properties", {})
@@ -103,6 +112,9 @@ def parse_item(item):
         "acquired_at": acquired_at,
         "cloud_cover_pct": float(cloud) if cloud is not None else None,
         "tile_id": tile[:20] or None,
+        "relative_orbit": props.get("sat:relative_orbit"),
+        "sun_elevation_deg": to_float(props.get("view:sun_elevation")),
+        "view_incidence_deg": to_float(props.get("view:incidence_angle")),
         "footprint": f"SRID=4326;{footprint.wkt}",
         "assets": read_band_links(item),
         "licence": LICENCE,
